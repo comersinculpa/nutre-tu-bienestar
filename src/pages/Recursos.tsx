@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Heart, Download, Play, BookOpen, Phone, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useEmotionalAnalysis } from '@/hooks/useEmotionalAnalysis';
+import { ContextualRecommendations } from '@/components/ContextualRecommendations';
 
 const recursos = [
   {
@@ -53,6 +55,20 @@ const recursos = [
 
 export default function Recursos() {
   const { toast } = useToast();
+  const { analyzeText } = useEmotionalAnalysis();
+
+  // Get user's recent emotional state from localStorage for contextual recommendations
+  const getContextualRecommendations = () => {
+    const recentEntries = JSON.parse(localStorage.getItem('diaryEntries') || '[]');
+    const lastEntry = recentEntries[0];
+    
+    if (lastEntry?.analysis) {
+      return lastEntry.analysis;
+    }
+    return null;
+  };
+
+  const contextualAnalysis = getContextualRecommendations();
 
   const handleResourceClick = (titulo: string, tipo: string) => {
     toast({
@@ -82,9 +98,24 @@ export default function Recursos() {
         </div>
 
         <Avatar 
-          mood="supportive" 
-          message="Aquí tienes recursos que te pueden ayudar en diferentes momentos. Elige lo que necesites ahora."
+          mood={contextualAnalysis?.risk === 'high' ? 'calming' : 'supportive'}
+          message={
+            contextualAnalysis?.needsSupport 
+              ? "He notado que podrías necesitar apoyo extra hoy. Estos recursos están especialmente seleccionados para ti."
+              : "Aquí tienes recursos que te pueden ayudar en diferentes momentos. Elige lo que necesites ahora."
+          }
         />
+
+        {/* Contextual Recommendations based on recent emotional state */}
+        {contextualAnalysis && (
+          <ContextualRecommendations 
+            risk={contextualAnalysis.risk}
+            emotions={contextualAnalysis.emotions}
+            triggers={contextualAnalysis.triggers}
+            recommendations={contextualAnalysis.recommendations}
+            needsSupport={contextualAnalysis.needsSupport}
+          />
+        )}
 
         {/* Emergency Contact */}
         <Card className="bg-gradient-warm shadow-warm border-0 border-l-4 border-l-destructive">

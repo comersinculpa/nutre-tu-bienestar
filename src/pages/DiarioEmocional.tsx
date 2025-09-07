@@ -6,14 +6,20 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Mic, Save, Camera } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useEmotionalAnalysis } from '@/hooks/useEmotionalAnalysis';
+import { ContextualRecommendations } from '@/components/ContextualRecommendations';
+import { ImageUpload } from '@/components/ImageUpload';
 
 export default function DiarioEmocional() {
   const [selectedEmotion, setSelectedEmotion] = useState<string>('');
   const [diaryText, setDiaryText] = useState('');
   const [isRecording, setIsRecording] = useState(false);
+  const [analysis, setAnalysis] = useState<any>(null);
+  const [showImageUpload, setShowImageUpload] = useState(false);
   const { toast } = useToast();
+  const { analyzeText, isAnalyzing } = useEmotionalAnalysis();
 
-  const handleSaveEntry = () => {
+  const handleSaveEntry = async () => {
     if (!selectedEmotion || !diaryText.trim()) {
       toast({
         title: "Información incompleta",
@@ -23,15 +29,29 @@ export default function DiarioEmocional() {
       return;
     }
 
-    // Here would be the logic to save to backend
+    // Analyze text for emotional patterns and risk
+    const emotionalAnalysis = await analyzeText(diaryText, selectedEmotion);
+    setAnalysis(emotionalAnalysis);
+
+    // Save to localStorage with analysis
+    const entryData = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      emotion: selectedEmotion,
+      text: diaryText,
+      analysis: emotionalAnalysis
+    };
+
+    const existingEntries = JSON.parse(localStorage.getItem('diaryEntries') || '[]');
+    const updatedEntries = [entryData, ...existingEntries];
+    localStorage.setItem('diaryEntries', JSON.stringify(updatedEntries));
+
     toast({
-      title: "Entrada guardada",
-      description: "Tu registro emocional ha sido guardado con éxito.",
+      title: "Entrada guardada y analizada",
+      description: "He revisado tu texto y tengo algunas recomendaciones para ti.",
     });
 
-    // Reset form
-    setSelectedEmotion('');
-    setDiaryText('');
+    // Don't reset form immediately so user can see analysis
   };
 
   const handleVoiceRecord = () => {
@@ -112,13 +132,39 @@ export default function DiarioEmocional() {
                 variant="outline"
                 size="sm"
                 className="flex-1"
+                onClick={() => setShowImageUpload(!showImageUpload)}
               >
                 <Camera className="w-4 h-4 mr-2" />
-                Añadir foto
+                {showImageUpload ? 'Ocultar cámara' : 'Añadir foto'}
               </Button>
             </div>
           </CardContent>
         </Card>
+
+        {/* Image Upload for Selfie Emotion Detection */}
+        {showImageUpload && (
+          <ImageUpload 
+            type="selfie"
+            onAnalysisComplete={(result) => {
+              setSelectedEmotion(result.primaryEmotion);
+              toast({
+                title: "Emoción detectada",
+                description: `He detectado ${result.primaryEmotion} con ${result.confidence}% de confianza`,
+              });
+            }}
+          />
+        )}
+
+        {/* Contextual Recommendations based on Analysis */}
+        {analysis && (
+          <ContextualRecommendations 
+            risk={analysis.risk}
+            emotions={analysis.emotions}
+            triggers={analysis.triggers}
+            recommendations={analysis.recommendations}
+            needsSupport={analysis.needsSupport}
+          />
+        )}
 
         {/* Previous Entries Preview */}
         <Card className="bg-secondary-soft shadow-card border-0">
@@ -154,12 +200,28 @@ export default function DiarioEmocional() {
         <div className="flex gap-3 pt-4">
           <Button 
             onClick={handleSaveEntry}
+            disabled={isAnalyzing}
             className="flex-1 bg-gradient-primary shadow-soft hover:shadow-warm transition-all duration-300"
             size="lg"
           >
             <Save className="w-5 h-5 mr-2" />
-            Guardar Entrada
+            {isAnalyzing ? 'Analizando...' : 'Guardar y Analizar'}
           </Button>
+          
+          {analysis && (
+            <Button 
+              onClick={() => {
+                setSelectedEmotion('');
+                setDiaryText('');
+                setAnalysis(null);
+                setShowImageUpload(false);
+              }}
+              variant="outline"
+              size="lg"
+            >
+              Nueva Entrada
+            </Button>
+          )}
         </div>
       </div>
     </div>
