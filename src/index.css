@@ -8,77 +8,32 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Comer Sin Culpa - Modo claro */
-    /* Crema suave base */
-    --background: 36 29% 97%;
-    --foreground: 153 100% 10%;
-
-    /* Card colors */
-    --card: 36 29% 97%;
-    --card-foreground: 153 100% 10%;
-
-    /* Popover colors */
-    --popover: 36 29% 97%;
-    --popover-foreground: 153 100% 10%;
-
-    /* Primary - ocre cálido (brand principal) */
-    --primary: 35 54% 72%;
-    --primary-foreground: 153 100% 10%;
-    --primary-soft: 35 54% 85%;
-    --primary-glow: 35 64% 65%;
-
-    /* Secondary - verde oscuro (apoyo) */
-    --secondary: 153 51% 19%;
-    --secondary-foreground: 36 29% 97%;
-    --secondary-soft: 153 31% 85%;
-
-    /* Muted - gris cálido */
-    --muted: 36 15% 95%;
-    --muted-foreground: 0 0% 54%;
-
-    /* Accent - amarillo suave */
-    --accent: 49 87% 66%;
-    --accent-foreground: 153 100% 10%;
-    --accent-soft: 49 87% 90%;
-
-    /* Success - verde suave */
-    --success: 153 51% 19%;
-    --success-foreground: 36 29% 97%;
-    --success-soft: 153 31% 90%;
-
-    /* Warning - ocre para estados de alerta */
-    --warning: 35 54% 72%;
-    --warning-foreground: 153 100% 10%;
-    --warning-soft: 35 54% 90%;
-
-    /* Destructive - rojo suave */
-    --destructive: 0 50% 70%;
-    --destructive-foreground: 36 29% 97%;
-
-    /* Border and input */
-    --border: 36 15% 90%;
-    --input: 36 15% 95%;
-    --ring: 35 54% 72%;
-
-    /* Gradientes cálidos */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-warm: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary-soft)));
-    --gradient-calm: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--primary-soft)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
-
-    /* Sombras suaves */
-    --shadow-soft: 0 4px 20px -8px hsl(var(--primary) / 0.15);
-    --shadow-warm: 0 8px 30px -10px hsl(var(--accent) / 0.2);
-    --shadow-card: 0 2px 15px -5px hsl(var(--muted-foreground) / 0.08);
-    --shadow-glow: 0 0 25px hsl(var(--primary) / 0.1);
-
-    /* Animaciones suaves y cálidas */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-warm: all 0.25s ease-in-out;
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.25, 0.265, 1.25);
-
-    --radius: 1rem;
+    /* Comer Sin Culpa - Paleta oficial del blog */
+    --background: 39 15% 97%;
+    --foreground: 180 26% 22%;
+    --card: 39 15% 98%;
+    --card-foreground: 180 26% 22%;
+    --popover: 39 15% 98%;
+    --popover-foreground: 180 26% 22%;
+    --primary: 180 26% 22%;
+    --primary-foreground: 39 30% 91%;
+    --secondary: 34 30% 85%;
+    --secondary-foreground: 180 34% 18%;
+    --muted: 39 15% 94%;
+    --muted-foreground: 180 10% 50%;
+    --accent: 41 85% 66%;
+    --accent-foreground: 180 34% 18%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 39 30% 91%;
+    --border: 39 15% 88%;
+    --input: 39 15% 88%;
+    --ring: 180 26% 22%;
+    --chart-1: 41 85% 66%;
+    --chart-2: 34 30% 85%;
+    --chart-3: 180 26% 22%;
+    --chart-4: 39 15% 85%;
+    --chart-5: 180 34% 18%;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -99,56 +54,30 @@ All colors MUST be HSL.
 
   .dark {
     /* Comer Sin Culpa - Modo oscuro */
-    /* Carbón base */
-    --background: 220 39% 11%;
-    --foreground: 49 87% 87%;
-
-    /* Card colors oscuras */
-    --card: 220 39% 11%;
-    --card-foreground: 49 87% 87%;
-
-    /* Popover colors oscuras */
-    --popover: 220 39% 11%;
-    --popover-foreground: 49 87% 87%;
-
-    /* Primary - ocre profundo */
-    --primary: 35 34% 57%;
-    --primary-foreground: 220 39% 11%;
-    --primary-soft: 35 34% 25%;
-    --primary-glow: 35 44% 67%;
-
-    /* Secondary - verde musgo */
-    --secondary: 150 31% 29%;
-    --secondary-foreground: 49 87% 87%;
-    --secondary-soft: 150 31% 15%;
-
-    /* Muted oscuro */
-    --muted: 220 30% 18%;
-    --muted-foreground: 0 0% 60%;
-
-    /* Accent - marfil para acentos */
-    --accent: 49 87% 87%;
-    --accent-foreground: 220 39% 11%;
-    --accent-soft: 49 67% 25%;
-
-    /* Success oscuro */
-    --success: 150 31% 29%;
-    --success-foreground: 49 87% 87%;
-    --success-soft: 150 31% 15%;
-
-    /* Warning oscuro */
-    --warning: 35 34% 57%;
-    --warning-foreground: 220 39% 11%;
-    --warning-soft: 35 34% 25%;
-
-    /* Destructive oscuro */
-    --destructive: 0 50% 55%;
-    --destructive-foreground: 49 87% 87%;
-
-    /* Border and input oscuros */
-    --border: 220 30% 18%;
-    --input: 220 30% 18%;
-    --ring: 35 34% 57%;
+    --background: 215 25% 7%;
+    --foreground: 39 30% 91%;
+    --card: 215 25% 8%;
+    --card-foreground: 39 30% 91%;
+    --popover: 215 25% 8%;
+    --popover-foreground: 39 30% 91%;
+    --primary: 180 20% 28%;
+    --primary-foreground: 39 30% 91%;
+    --secondary: 34 25% 45%;
+    --secondary-foreground: 39 30% 91%;
+    --muted: 215 25% 12%;
+    --muted-foreground: 39 15% 65%;
+    --accent: 41 75% 61%;
+    --accent-foreground: 215 25% 8%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 39 30% 91%;
+    --border: 215 25% 15%;
+    --input: 215 25% 15%;
+    --ring: 180 20% 28%;
+    --chart-1: 41 75% 61%;
+    --chart-2: 34 25% 45%;
+    --chart-3: 180 20% 28%;
+    --chart-4: 39 15% 45%;
+    --chart-5: 215 25% 35%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

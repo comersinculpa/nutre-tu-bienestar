@@ -1,216 +1,206 @@
-import { Avatar } from '@/components/Avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Heart, Download, Play, BookOpen, Phone, AlertTriangle } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useEmotionalAnalysis } from '@/hooks/useEmotionalAnalysis';
-import { ContextualRecommendations } from '@/components/ContextualRecommendations';
+import { Heart, BookOpen, Headphones, PenTool, Palette, Music, ArrowLeft, Target, Sparkles } from 'lucide-react';
+import { MeditacionesGuiadas } from '@/components/MeditacionesGuiadas';
+import { EscrituraTerapeutica } from '@/components/EscrituraTerapeutica';
+import { RespuestasConscientes } from '@/components/RespuestasConscientes';
+import { RetosAutocuidado } from '@/components/RetosAutocuidado';
+
+type SeccionRecurso = 'menu' | 'meditaciones' | 'escritura' | 'respuestas' | 'retos' | 'mandalas' | 'musica';
 
 const recursos = [
   {
-    categoria: 'Técnicas de Calma',
+    id: 'meditaciones',
+    categoria: 'Audio',
+    titulo: 'Meditaciones Guiadas',
+    descripcion: 'Sesiones de meditación para calmar la ansiedad y conectar con tu cuerpo',
+    icono: Headphones,
+    color: 'bg-blue-50 text-blue-600'
+  },
+  {
+    id: 'escritura',
+    categoria: 'Escritura',
+    titulo: 'Escritura Terapéutica',
+    descripcion: 'Ejercicios de escritura consciente para explorar emociones',
+    icono: PenTool,
+    color: 'bg-green-50 text-green-600'
+  },
+  {
+    id: 'respuestas',
+    categoria: 'Apoyo',
+    titulo: 'Respuestas Conscientes',
+    descripcion: 'Mensajes de autocompasión para momentos difíciles',
     icono: Heart,
-    color: 'success',
-    bgColor: 'bg-success-soft',
-    items: [
-      { titulo: 'Respiración 4-7-8', tipo: 'audio', duracion: '5 min' },
-      { titulo: 'Meditación para Ansiedad', tipo: 'audio', duracion: '10 min' },
-      { titulo: 'Ejercicios de Grounding', tipo: 'guía', duracion: 'Lectura' }
-    ]
+    color: 'bg-pink-50 text-pink-600'
   },
   {
-    categoria: 'Manejo de Impulsos',
-    icono: AlertTriangle,
-    color: 'warning',
-    bgColor: 'bg-warning-soft',
-    items: [
-      { titulo: 'Técnica STOP', tipo: 'guía', duracion: 'Lectura' },
-      { titulo: 'Distracción Consciente', tipo: 'ejercicio', duracion: '3-5 min' },
-      { titulo: 'Plan de Emergencia Personal', tipo: 'plantilla', duracion: 'Personalizar' }
-    ]
+    id: 'retos',
+    categoria: 'Crecimiento',
+    titulo: 'Retos de Autocuidado',
+    descripcion: 'Desafíos suaves para desarrollar hábitos de bienestar',
+    icono: Target,
+    color: 'bg-purple-50 text-purple-600'
   },
   {
-    categoria: 'Alimentación Consciente',
-    icono: BookOpen,
-    color: 'primary',
-    bgColor: 'bg-primary-soft',
-    items: [
-      { titulo: 'Guía de Hambre-Saciedad', tipo: 'guía', duracion: 'Lectura' },
-      { titulo: 'Meditación Pre-Comida', tipo: 'audio', duracion: '3 min' },
-      { titulo: 'Registro de Sensaciones', tipo: 'plantilla', duracion: 'Diario' }
-    ]
+    id: 'mandalas',
+    categoria: 'Creatividad',
+    titulo: 'Mandalas para Colorear',
+    descripcion: 'Actividades creativas para reducir el estrés y encontrar calma',
+    icono: Palette,
+    color: 'bg-orange-50 text-orange-600'
   },
   {
-    categoria: 'Autocuidado Emocional',
-    icono: Heart,
-    color: 'accent',
-    bgColor: 'bg-accent-soft',
-    items: [
-      { titulo: 'Cartas de Compasión Personal', tipo: 'ejercicio', duracion: '15 min' },
-      { titulo: 'Ritual de Autocuidado', tipo: 'guía', duracion: 'Lectura' },
-      { titulo: 'Afirmaciones Positivas', tipo: 'audio', duracion: '7 min' }
-    ]
+    id: 'musica',
+    categoria: 'Música',
+    titulo: 'Playlists de Bienestar',
+    descripcion: 'Música cuidadosamente seleccionada para diferentes estados emocionales',
+    icono: Music,
+    color: 'bg-indigo-50 text-indigo-600'
   }
 ];
 
 export default function Recursos() {
-  const { toast } = useToast();
-  const { analyzeText } = useEmotionalAnalysis();
+  const [seccionActiva, setSeccionActiva] = useState<SeccionRecurso>('menu');
 
-  // Get user's recent emotional state from localStorage for contextual recommendations
-  const getContextualRecommendations = () => {
-    const recentEntries = JSON.parse(localStorage.getItem('diaryEntries') || '[]');
-    const lastEntry = recentEntries[0];
-    
-    if (lastEntry?.analysis) {
-      return lastEntry.analysis;
+  const volverAlMenu = () => setSeccionActiva('menu');
+
+  const renderSeccion = () => {
+    switch (seccionActiva) {
+      case 'meditaciones':
+        return <MeditacionesGuiadas />;
+      case 'escritura':
+        return <EscrituraTerapeutica />;
+      case 'respuestas':
+        return <RespuestasConscientes />;
+      case 'retos':
+        return <RetosAutocuidado />;
+      case 'mandalas':
+        return <MandalasParaColorear />;
+      case 'musica':
+        return <PlaylistsBienestar />;
+      default:
+        return null;
     }
-    return null;
   };
 
-  const contextualAnalysis = getContextualRecommendations();
-
-  const handleResourceClick = (titulo: string, tipo: string) => {
-    toast({
-      title: `Abriendo ${titulo}`,
-      description: `${tipo === 'audio' ? 'Reproduciendo' : 'Cargando'} recurso...`,
-    });
-  };
-
-  const handleEmergencyContact = () => {
-    toast({
-      title: "Contacto de Emergencia",
-      description: "Te conectaremos con apoyo profesional inmediato.",
-      variant: "default",
-    });
-  };
+  if (seccionActiva !== 'menu') {
+    return (
+      <div className="min-h-screen bg-background pb-20">
+        <div className="container mx-auto px-4 pt-8 space-y-6">
+          <Button 
+            variant="ghost" 
+            onClick={volverAlMenu}
+            className="mb-4"
+          >
+            <ArrowLeft size={16} className="mr-2" />
+            Volver a Recursos
+          </Button>
+          
+          {renderSeccion()}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-calm pb-20">
-      <div className="px-6 py-6 space-y-6">
-        <div className="text-center pt-4">
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            Recursos de Apoyo
-          </h1>
-          <p className="text-muted-foreground">
-            Herramientas para tu bienestar emocional
+    <div className="min-h-screen bg-background pb-20">
+      <div className="container mx-auto px-4 pt-8 space-y-8">
+        <div className="text-center space-y-4">
+          <h1 className="text-3xl font-bold text-foreground">Recursos de Bienestar</h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Herramientas y recursos diseñados para apoyarte en tu proceso de sanación y autocuidado.
+            Todo en un espacio seguro y privado.
           </p>
         </div>
 
-        <Avatar 
-          mood={contextualAnalysis?.risk === 'high' ? 'calming' : 'supportive'}
-          message={
-            contextualAnalysis?.needsSupport 
-              ? "He notado que podrías necesitar apoyo extra hoy. Estos recursos están especialmente seleccionados para ti."
-              : "Aquí tienes recursos que te pueden ayudar en diferentes momentos. Elige lo que necesites ahora."
-          }
-        />
-
-        {/* Contextual Recommendations based on recent emotional state */}
-        {contextualAnalysis && (
-          <ContextualRecommendations 
-            risk={contextualAnalysis.risk}
-            emotions={contextualAnalysis.emotions}
-            triggers={contextualAnalysis.triggers}
-            recommendations={contextualAnalysis.recommendations}
-            needsSupport={contextualAnalysis.needsSupport}
-          />
-        )}
-
-        {/* Emergency Contact */}
-        <Card className="bg-gradient-warm shadow-warm border-0 border-l-4 border-l-destructive">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-destructive/10 rounded-full">
-                <Phone className="w-6 h-6 text-destructive" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-foreground">
-                  ¿Necesitas ayuda urgente?
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Contacto inmediato con apoyo profesional
-                </p>
-              </div>
-              <Button 
-                onClick={handleEmergencyContact}
-                className="bg-destructive hover:bg-destructive/90"
-                size="sm"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {recursos.map((recurso) => {
+            const Icono = recurso.icono;
+            return (
+              <Card 
+                key={recurso.id} 
+                className="group hover:shadow-lg transition-all duration-300 cursor-pointer"
+                onClick={() => setSeccionActiva(recurso.id as SeccionRecurso)}
               >
-                Contactar
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Resource Categories */}
-        {recursos.map((categoria, index) => {
-          const IconoCategoria = categoria.icono;
-          
-          return (
-            <Card key={index} className="bg-gradient-card shadow-card border-0">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${categoria.bgColor}`}>
-                    <IconoCategoria className={`w-5 h-5 text-${categoria.color}`} />
+                <CardHeader className="text-center pb-4">
+                  <div className={`w-16 h-16 rounded-full ${recurso.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                    <Icono size={24} />
                   </div>
-                  {categoria.categoria}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {categoria.items.map((item, itemIndex) => (
-                  <div 
-                    key={itemIndex}
-                    className="flex items-center justify-between p-3 bg-background/50 rounded-lg hover:bg-background/70 transition-colors cursor-pointer"
-                    onClick={() => handleResourceClick(item.titulo, item.tipo)}
-                  >
-                    <div className="flex items-center gap-3">
-                      {item.tipo === 'audio' && <Play className="w-4 h-4 text-success" />}
-                      {item.tipo === 'guía' && <BookOpen className="w-4 h-4 text-primary" />}
-                      {item.tipo === 'ejercicio' && <Heart className="w-4 h-4 text-warning" />}
-                      {item.tipo === 'plantilla' && <Download className="w-4 h-4 text-accent" />}
-                      
-                      <div>
-                        <h4 className="font-medium text-foreground">{item.titulo}</h4>
-                        <p className="text-xs text-muted-foreground capitalize">
-                          {item.tipo} • {item.duracion}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <Button size="sm" variant="ghost">
-                      {item.tipo === 'audio' ? 'Reproducir' : 'Abrir'}
-                    </Button>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          );
-        })}
-
-        {/* Daily Resources */}
-        <Card className="bg-gradient-warm shadow-warm border-0">
-          <CardHeader>
-            <CardTitle>💙 Recurso Diario</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center space-y-3">
-              <p className="text-foreground/80">
-                "Técnica de los 5 Sentidos para Ansiedad"
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Identifica: 5 cosas que ves, 4 que escuchas, 3 que tocas, 2 que hueles, 1 que saboreas
-              </p>
-              <Button 
-                onClick={() => handleResourceClick('Técnica 5 Sentidos', 'ejercicio')}
-                className="bg-gradient-primary shadow-soft"
-              >
-                Practicar Ahora
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+                  <Badge variant="outline" className="w-fit mx-auto mb-2">
+                    {recurso.categoria}
+                  </Badge>
+                  <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                    {recurso.titulo}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <CardDescription className="mb-6">
+                    {recurso.descripcion}
+                  </CardDescription>
+                  <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    Explorar
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
+
+// Componente placeholder para Mandalas
+const MandalasParaColorear: React.FC = () => (
+  <div className="text-center space-y-6">
+    <div className="space-y-2">
+      <h2 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
+        <Palette className="text-orange-500" size={24} />
+        Mandalas para Colorear
+      </h2>
+      <p className="text-muted-foreground">
+        Encuentra calma y creatividad coloreando hermosos mandalas
+      </p>
+    </div>
+    
+    <Card className="max-w-md mx-auto">
+      <CardContent className="p-8 text-center">
+        <Sparkles className="mx-auto mb-4 text-orange-500" size={48} />
+        <h3 className="text-lg font-semibold mb-2">Próximamente</h3>
+        <p className="text-muted-foreground">
+          Esta sección estará disponible muy pronto con una colección de mandalas terapéuticos.
+        </p>
+      </CardContent>
+    </Card>
+  </div>
+);
+
+// Componente placeholder para Playlists
+const PlaylistsBienestar: React.FC = () => (
+  <div className="text-center space-y-6">
+    <div className="space-y-2">
+      <h2 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
+        <Music className="text-indigo-500" size={24} />
+        Playlists de Bienestar
+      </h2>
+      <p className="text-muted-foreground">
+        Música curativa para acompañar tu proceso de sanación
+      </p>
+    </div>
+    
+    <Card className="max-w-md mx-auto">
+      <CardContent className="p-8 text-center">
+        <Music className="mx-auto mb-4 text-indigo-500" size={48} />
+        <h3 className="text-lg font-semibold mb-2">Integración con Spotify</h3>
+        <p className="text-muted-foreground mb-4">
+          Conectaremos con Spotify para ofrecerte playlists personalizadas según tu estado emocional.
+        </p>
+        <Button variant="outline" disabled>
+          Conectar con Spotify
+        </Button>
+      </CardContent>
+    </Card>
+  </div>
+);
