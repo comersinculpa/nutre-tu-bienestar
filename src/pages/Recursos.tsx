@@ -12,6 +12,7 @@ import { ProgramaHipnosis } from '@/components/ProgramaHipnosis';
 import { MandalasParaColorear } from '@/components/MandalasParaColorear';
 import { JuegosEducativos } from '@/components/JuegosEducativos';
 import { CocinaTerapeutica } from '@/components/CocinaTerapeutica';
+import { MindfulEating } from '@/components/MindfulEating';
 
 // Import icons separately to avoid conflicts
 import { 
@@ -23,10 +24,11 @@ import {
   Music as MusicIcon, 
   Target as TargetIcon, 
   Sparkles as SparklesIcon, 
-  Brain as BrainIcon 
+  Brain as BrainIcon,
+  Utensils as UtensilsIcon
 } from 'lucide-react';
 
-type SeccionRecurso = 'menu' | 'meditaciones' | 'escritura' | 'respuestas' | 'retos' | 'mandalas' | 'musica' | 'hipnosis' | 'juegos-educativos' | 'cocina-terapeutica';
+type SeccionRecurso = 'menu' | 'meditaciones' | 'escritura' | 'respuestas' | 'retos' | 'mandalas' | 'musica' | 'hipnosis' | 'juegos-educativos' | 'cocina-terapeutica' | 'mindful-eating';
 
 const recursos = [
   {
@@ -100,6 +102,14 @@ const recursos = [
     descripcion: 'Reconecta con la comida desde el placer y la intuición, sin etiquetas ni control',
     icono: HeartIcon,
     color: 'bg-rose-50 text-rose-600'
+  },
+  {
+    id: 'mindful-eating',
+    categoria: 'Alimentación Consciente',
+    titulo: 'Mindful Eating',
+    descripcion: 'Audios breves para practicar alimentación consciente y conectar con tus sensaciones',
+    icono: UtensilsIcon,
+    color: 'bg-emerald-50 text-emerald-600'
   }
 ];
 
@@ -128,6 +138,8 @@ export default function Recursos() {
         return <JuegosEducativos />;
       case 'cocina-terapeutica':
         return <CocinaTerapeutica />;
+      case 'mindful-eating':
+        return <MindfulEating />;
       default:
         return null;
     }
