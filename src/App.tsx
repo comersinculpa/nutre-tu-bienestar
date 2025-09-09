@@ -23,7 +23,7 @@ import TCAModule from "./pages/TCAModule";
 import NotFound from "./pages/NotFound";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { CrisisButton } from "./components/CrisisButton";
-import { TherapistChat } from "./components/TherapistChat";
+import TherapistChat from "./components/TherapistChat";
 
 const queryClient = new QueryClient();
 
