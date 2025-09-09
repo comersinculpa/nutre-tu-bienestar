@@ -106,6 +106,27 @@ export default function Dashboard() {
           }
         />
 
+        {/* Mission Statement */}
+        <Card className="bg-gradient-card border-0 shadow-soft">
+          <CardContent className="p-6 text-center">
+            <div className="space-y-4">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-soft rounded-full mb-2">
+                <Heart className="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-heading font-semibold text-primary mb-2">
+                  "Reconocer, sentir y comer con conciencia"
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Nuestro objetivo es ayudarte a reconectar con tu cuerpo y emociones, 
+                  registrar tu relación con la comida y aprender a comer desde el cuidado, 
+                  no desde la culpa.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Risk Alerts */}
         {activeAlerts.length > 0 && (
           <RiskAlerts />
