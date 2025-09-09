@@ -33,10 +33,10 @@ export const TherapistChat: React.FC = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [therapist] = useState<Therapist>({
-    id: 'therapist-001',
-    name: 'Dra. Elena Martínez',
-    specialization: 'Especialista en TCA',
-    avatar: '/avatars/therapist.jpg',
+    id: 'support-assistant',
+    name: '¿En qué puedo ayudarte?',
+    specialization: 'Apoyo emocional disponible',
+    avatar: '/avatars/support.jpg',
     isOnline: true,
     responseTime: '< 4 horas'
   });
@@ -180,9 +180,9 @@ export const TherapistChat: React.FC = () => {
         <CardHeader className="pb-3">
           <div className="flex items-center gap-3">
             <Avatar className="w-12 h-12">
-              <AvatarImage src={therapist.avatar} alt={therapist.name} />
+              <AvatarImage src={therapist.avatar} alt="Asistente de apoyo" />
               <AvatarFallback className="bg-primary/20 text-primary font-semibold">
-                {therapist.name.split(' ').map(n => n[0]).join('')}
+                💚
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
