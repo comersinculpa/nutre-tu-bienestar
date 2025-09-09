@@ -152,6 +152,352 @@ const lecciones = {
         reflection: '¿Cuál será tu plan de autocuidado para los días difíciles?'
       }
     },
+  ],
+  'mindfulness': [
+    {
+      id: 1,
+      title: 'Las señales de tu cuerpo',
+      completed: false,
+      duration: '5 min',
+      content: {
+        intro: 'Tu cuerpo te envía constantemente señales sobre el hambre y la saciedad. Aprender a escucharlas es el primer paso.',
+        sections: [
+          {
+            title: 'Reconociendo el hambre física',
+            content: 'El hambre física aparece gradualmente: gruñidos del estómago, baja energía, dificultad para concentrarse. Es tu cuerpo pidiendo combustible.'
+          },
+          {
+            title: 'Identificando la saciedad',
+            content: 'La saciedad no es llenura completa. Es esa sensación sutil de satisfacción, cuando el hambre desaparece y te sientes cómodo.'
+          },
+          {
+            title: 'Factores que interfieren',
+            content: 'El estrés, las distracciones, comer muy rápido o estar desconectado de tu cuerpo pueden hacer que ignores estas señales.'
+          }
+        ],
+        reflection: '¿Cuándo fue la última vez que realmente sentiste hambre física? ¿Cómo la diferencias de otros tipos de "hambre"?'
+      }
+    },
+    {
+      id: 2,
+      title: 'Mindful eating: comer con atención',
+      completed: false,
+      duration: '6 min',
+      content: {
+        intro: 'Comer consciente significa prestar atención completa a la experiencia de alimentarse.',
+        sections: [
+          {
+            title: 'Los 5 sentidos',
+            content: 'Involucra vista, olfato, tacto, gusto y oído. Observa colores, texturas, aromas. Mastica lentamente y saborea cada bocado.'
+          },
+          {
+            title: 'Sin distracciones',
+            content: 'Apaga el teléfono, la TV, cierra el libro. La comida merece tu atención completa para que puedas registrar saciedad.'
+          },
+          {
+            title: 'Gratitud por el alimento',
+            content: 'Reconoce el camino que hizo la comida hasta llegar a ti. Esta conexión profundiza tu relación con la alimentación.'
+          }
+        ],
+        reflection: '¿Qué distracciones sueles tener mientras comes? ¿Cómo puedes crear un ambiente más consciente?'
+      }
+    },
+    {
+      id: 3,
+      title: 'Ejercicio práctico: La uva pasa',
+      completed: false,
+      duration: '4 min',
+      content: {
+        intro: 'Un ejercicio clásico para experimentar la alimentación consciente usando todos los sentidos.',
+        sections: [
+          {
+            title: 'Preparación',
+            content: 'Toma una uva pasa (o cualquier alimento pequeño). Siéntate cómodamente y elimina distracciones.'
+          },
+          {
+            title: 'Exploración sensorial',
+            content: 'Observa: color, forma, textura. Toca: suavidad, rugosidad. Huele: ¿qué aromas detectas? Escucha: ¿hace algún sonido?'
+          },
+          {
+            title: 'Degustación consciente',
+            content: 'Colócala en tu boca sin masticar. Siente la textura. Mastica lentamente, notando cómo cambian sabor y textura. Traga conscientemente.'
+          }
+        ],
+        reflection: '¿Qué descubriste en este ejercicio que nunca habías notado antes? ¿Cómo se sintió comer tan lentamente?'
+      }
+    },
+    {
+      id: 4,
+      title: 'Implementando en la vida diaria',
+      completed: false,
+      duration: '5 min',
+      content: {
+        intro: 'Cómo llevar la alimentación consciente a tus comidas cotidianas sin que sea abrumador.',
+        sections: [
+          {
+            title: 'Empezar pequeño',
+            content: 'No necesitas hacer todas las comidas conscientes. Empieza con los primeros 3 bocados de cada comida.'
+          },
+          {
+            title: 'Pausas durante la comida',
+            content: 'Deja los cubiertos cada pocos bocados. Pregúntate: ¿Todavía tengo hambre? ¿Cómo me siento?'
+          },
+          {
+            title: 'Ambiente propicio',
+            content: 'Come sentado, en un lugar tranquilo cuando sea posible. Si comes parado o con prisa, al menos haz 3 respiraciones antes de empezar.'
+          }
+        ],
+        reflection: '¿En qué comida del día te comprometes a practicar alimentación consciente esta semana?'
+      }
+    }
+  ],
+  'emociones': [
+    {
+      id: 1,
+      title: 'Entendiendo tus emociones',
+      completed: false,
+      duration: '4 min',
+      content: {
+        intro: 'Las emociones son mensajeros que nos dan información valiosa sobre nuestras necesidades.',
+        sections: [
+          {
+            title: 'Las emociones no son el problema',
+            content: 'Todas las emociones son válidas y tienen una función. El problema surge cuando no sabemos gestionarlas de manera saludable.'
+          },
+          {
+            title: 'La rueda emocional',
+            content: 'Existen emociones básicas (alegría, tristeza, miedo, ira) y matices más específicos (frustración, melancolía, ansiedad, euforia).'
+          },
+          {
+            title: 'Emociones y cuerpo',
+            content: 'Las emociones se sienten físicamente: tensión en hombros (estrés), nudo en estómago (ansiedad), calor en cara (ira).'
+          }
+        ],
+        reflection: '¿Qué emociones te resultan más difíciles de manejar? ¿Cómo las sientes en tu cuerpo?'
+      }
+    },
+    {
+      id: 2,
+      title: 'La técnica RAIN',
+      completed: false,
+      duration: '5 min',
+      content: {
+        intro: 'RAIN es una técnica de mindfulness para relacionarte con las emociones difíciles de manera compasiva.',
+        sections: [
+          {
+            title: 'R - Reconocer',
+            content: 'Pausa y nombra lo que está pasando: "Estoy sintiendo ansiedad" o "Hay tristeza aquí". No juzgues, solo reconoce.'
+          },
+          {
+            title: 'A - Aceptar/Acoger',
+            content: 'Permite que la emoción esté ahí sin tratar de cambiarla inmediatamente. "Está bien sentir esto". La resistencia amplifica el sufrimiento.'
+          },
+          {
+            title: 'I - Investigar',
+            content: 'Con curiosidad amable, explora: ¿Cómo se siente en mi cuerpo? ¿Qué pensamientos acompañan esta emoción? ¿Qué necesito ahora?'
+          },
+          {
+            title: 'N - No identificarse',
+            content: 'Recuerda que tú no eres la emoción. "Estoy experimentando tristeza" no "Soy una persona triste". Las emociones pasan.'
+          }
+        ],
+        reflection: '¿Puedes pensar en una situación reciente donde RAIN te habría ayudado? ¿Qué paso te resulta más difícil?'
+      }
+    },
+    {
+      id: 3,
+      title: 'Respiración para la regulación',
+      completed: false,
+      duration: '4 min',
+      content: {
+        intro: 'La respiración es una herramienta poderosa y siempre disponible para regular el sistema nervioso.',
+        sections: [
+          {
+            title: 'Respiración 4-7-8',
+            content: 'Inhala por 4 segundos, mantén por 7, exhala por 8. Esta técnica activa el sistema nervioso parasimpático (relajación).'
+          },
+          {
+            title: 'Respiración del corazón',
+            content: 'Coloca una mano en el corazón. Respira como si el aire entrara y saliera del corazón. Imagina enviándote amor con cada respiración.'
+          },
+          {
+            title: 'Cuándo usar cada una',
+            content: '4-7-8 para ansiedad aguda o antes de dormir. Respiración del corazón para tristeza, autocrítica o cuando necesitas autocompasión.'
+          }
+        ],
+        reflection: '¿Cuál de estas técnicas resuena más contigo? ¿En qué momentos del día podrías usarlas?'
+      }
+    },
+    {
+      id: 4,
+      title: 'Autocompasión en momentos difíciles',
+      completed: false,
+      duration: '4 min',
+      content: {
+        intro: 'La autocompasión no es autocomplacencia, es tratarte con la misma bondad que le ofrecerías a un buen amigo.',
+        sections: [
+          {
+            title: 'Los tres componentes',
+            content: 'Auto-bondad (en lugar de auto-crítica), humanidad común (no estás solo en esto), mindfulness (observar sin dramatizar).'
+          },
+          {
+            title: 'Frases de autocompasión',
+            content: '"Este es un momento difícil", "El sufrimiento es parte de la vida", "Que pueda ser bondadoso conmigo mismo ahora".'
+          },
+          {
+            title: 'El toque suave',
+            content: 'Coloca tu mano en el corazón, abraza tus brazos, o toca suavemente tu mejilla. El toque físico libera oxitocina y calma el sistema nervioso.'
+          }
+        ],
+        reflection: '¿Cómo te hablas a ti mismo en momentos difíciles? ¿Qué cambiarías para ser más compasivo?'
+      }
+    },
+    {
+      id: 5,
+      title: 'Journaling emocional',
+      completed: false,
+      duration: '4 min',
+      content: {
+        intro: 'Escribir sobre las emociones ayuda a procesarlas y ganar claridad sobre lo que realmente está pasando.',
+        sections: [
+          {
+            title: 'Escritura libre',
+            content: 'Escribe durante 5-10 minutos sin parar, sin censurar. Deja que fluya todo lo que sientes. No importa si no tiene sentido.'
+          },
+          {
+            title: 'Preguntas guía',
+            content: '¿Qué estoy sintiendo ahora? ¿Qué necesito en este momento? ¿Qué me ayudaría a sentirme más en paz?'
+          },
+          {
+            title: 'Patrón emocional',
+            content: 'Con el tiempo, notarás patrones: situaciones que te activan, emociones recurrentes, estrategias que te funcionan.'
+          }
+        ],
+        reflection: '¿Has notado que escribir sobre tus emociones te ayuda? ¿Qué descubres cuando pones sentimientos en palabras?'
+      }
+    },
+    {
+      id: 6,
+      title: 'Plan de acción personalizado',
+      completed: false,
+      duration: '4 min',
+      content: {
+        intro: 'Crea tu kit de herramientas personal para momentos emocionales difíciles.',
+        sections: [
+          {
+            title: 'Identificar señales tempranas',
+            content: '¿Cómo sabes que una emoción difícil se aproxima? Tensión muscular, cambios en el sueño, irritabilidad, etc.'
+          },
+          {
+            title: 'Tu caja de herramientas',
+            content: 'Lista 3-5 estrategias que funcionan para ti: llamar a alguien, caminar, música, baño caliente, respiración, escritura.'
+          },
+          {
+            title: 'Red de apoyo',
+            content: 'Identifica 2-3 personas a quienes puedes recurrir. Ten sus números disponibles. Practica pedir ayuda antes de necesitarla desesperadamente.'
+          }
+        ],
+        reflection: '¿Cuáles son tus herramientas más efectivas? ¿Qué obstáculos te impiden usarlas cuando más las necesitas?'
+      }
+    }
+  ],
+  'hambre-emocional': [
+    {
+      id: 1,
+      title: 'Diferencias clave: física vs emocional',
+      completed: true,
+      duration: '4 min',
+      content: {
+        intro: 'Aprender a distinguir entre hambre física y emocional es fundamental para una relación sana con la comida.',
+        sections: [
+          {
+            title: 'Hambre física',
+            content: 'Aparece gradualmente, cualquier comida la satisface, se siente en el estómago, aparece 3-5 horas después de comer.'
+          },
+          {
+            title: 'Hambre emocional',
+            content: 'Aparece súbitamente, busca comidas específicas (usualmente dulces/procesadas), se siente "en la cabeza", no se relaciona con tiempo desde la última comida.'
+          },
+          {
+            title: 'Después de comer',
+            content: 'Hambre física: satisfacción y energía. Hambre emocional: a menudo culpa, vergüenza, o la emoción original sigue ahí.'
+          }
+        ],
+        reflection: '¿Puedes recordar un episodio reciente de hambre emocional? ¿Qué características tenía?'
+      }
+    },
+    {
+      id: 2,
+      title: 'Emociones que activan el comer',
+      completed: false,
+      duration: '5 min',
+      content: {
+        intro: 'Identificar qué emociones te llevan a buscar comida es el primer paso para responder de manera diferente.',
+        sections: [
+          {
+            title: 'Emociones comunes',
+            content: 'Estrés, aburrimiento, soledad, tristeza, ansiedad, celebración, frustración. Cada persona tiene sus "triggers" específicos.'
+          },
+          {
+            title: 'La comida como regulador',
+            content: 'Usamos la comida para calmar, distraer, recompensar o llenar vacíos emocionales. Es una estrategia que funciona a corto plazo.'
+          },
+          {
+            title: 'Identificando tu patrón',
+            content: '¿Qué emociones te llevan a la comida? ¿En qué momentos del día? ¿Hay situaciones específicas que lo desencadenan?'
+          }
+        ],
+        reflection: '¿Cuál es tu emoción "trigger" más común? ¿Qué tipo de comida buscas cuando la sientes?'
+      }
+    },
+    {
+      id: 3,
+      title: 'La pausa consciente',
+      completed: false,
+      duration: '5 min',
+      content: {
+        intro: 'Crear un espacio entre el impulso y la acción te da la oportunidad de elegir conscientemente.',
+        sections: [
+          {
+            title: 'El método STOP',
+            content: 'S-Stop (para), T-Take a breath (respira), O-Observe (observa qué sientes), P-Proceed (procede conscientemente).'
+          },
+          {
+            title: 'Preguntas poderosas',
+            content: '¿Realmente tengo hambre? ¿Qué estoy sintiendo ahora? ¿Qué necesito realmente? ¿La comida resolverá esto?'
+          },
+          {
+            title: 'Los primeros 10 minutos',
+            content: 'Comprométete a esperar 10 minutos antes de comer cuando sospeches que es hambre emocional. A menudo el impulso pasa.'
+          }
+        ],
+        reflection: '¿Qué te resulta más difícil: parar, respirar, observar o proceder conscientemente? ¿Por qué?'
+      }
+    },
+    {
+      id: 4,
+      title: 'Alternativas saludables',
+      completed: false,
+      duration: '4 min',
+      content: {
+        intro: 'Desarrollar un repertorio de alternativas satisface las necesidades emocionales sin usar la comida.',
+        sections: [
+          {
+            title: 'Para diferentes emociones',
+            content: 'Estrés: respiración, movimiento. Aburrimiento: actividad creativa. Soledad: llamar a alguien. Tristeza: autocuidado gentil.'
+          },
+          {
+            title: 'Lista de emergencia',
+            content: 'Ten una lista visible de 10 alternativas: ducha caliente, música, mascotas, arte, caminar, té, llamada, estiramiento, lectura.'
+          },
+          {
+            title: 'Si eliges comer',
+            content: 'A veces elegirás comer y está bien. Hazlo conscientemente, sin culpa, disfrutando, y luego atiende la emoción subyacente.'
+          }
+        ],
+        reflection: '¿Qué alternativas han funcionado para ti en el pasado? ¿Cuáles te gustaría probar?'
+      }
+    }
   ]
 };
 
