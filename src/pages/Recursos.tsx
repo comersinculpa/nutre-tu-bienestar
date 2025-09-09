@@ -69,7 +69,7 @@ const recursos = [
     titulo: 'Mandalas para Colorear',
     descripcion: 'Actividades creativas para reducir el estrés y encontrar calma',
     icono: PaletteIcon,
-    color: 'bg-orange-50 text-orange-600'
+    color: 'bg-slate-50 text-slate-600'
   },
   {
     id: 'musica',

@@ -42,7 +42,7 @@ export function BottomNavigation() {
       navigator.vibrate(50);
     }
   };
-  return <nav className="bottom-nav glass-nav bg-orange-400">
+  return <nav className="bottom-nav glass-nav bg-slate-400">
       <div className="flex justify-around items-center max-w-lg mx-auto px-2 py-2">
         {navigationItems.map(item => {
         const Icon = item.icon;

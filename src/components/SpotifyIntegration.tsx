@@ -291,7 +291,7 @@ export const SpotifyIntegration: React.FC = () => {
       case 'feliz': return 'bg-slate-500/10 border-slate-500/20';
       case 'triste': return 'bg-blue-500/10 border-blue-500/20';
       case 'ansioso': return 'bg-red-500/10 border-red-500/20';
-      case 'enérgico': return 'bg-orange-500/10 border-orange-500/20';
+      case 'enérgico': return 'bg-slate-500/10 border-slate-500/20';
       case 'relajado': return 'bg-green-500/10 border-green-500/20';
       default: return 'bg-muted/30 border-muted';
     }
@@ -311,7 +311,7 @@ export const SpotifyIntegration: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           {SPOTIFY_CLIENT_ID === 'YOUR_SPOTIFY_CLIENT_ID' ? (
-            <Alert className="border-orange-500/20 bg-orange-500/10">
+            <Alert className="border-slate-500/20 bg-slate-500/10">
               <Settings className="h-4 w-4" />
               <AlertDescription>
                 <strong>Configuración requerida:</strong> Para habilitar la integración con Spotify, necesitas:

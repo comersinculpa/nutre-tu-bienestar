@@ -69,7 +69,7 @@ const juegos = [
     titulo: 'Juego de roles con la crítica interna',
     descripcion: 'Practica respuestas compasivas para debilitar el poder de tu crítica interna',
     icono: Users,
-    color: 'bg-orange-50 text-orange-600',
+    color: 'bg-slate-50 text-slate-600',
     categoria: 'Autocompasión'
   }
 ];

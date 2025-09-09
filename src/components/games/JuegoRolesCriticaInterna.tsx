@@ -119,7 +119,7 @@ export function JuegoRolesCriticaInterna() {
               </div>
             </div>
 
-            <div className="bg-orange-50 p-4 rounded-lg">
+            <div className="bg-slate-50 p-4 rounded-lg">
               <p className="text-sm text-orange-800">
                 <Lightbulb className="w-4 h-4 inline mr-2" />
                 <strong>Recuerda:</strong> Este ejercicio te entrena para interrumpir activamente los ciclos 

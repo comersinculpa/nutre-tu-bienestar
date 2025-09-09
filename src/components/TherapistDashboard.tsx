@@ -150,7 +150,7 @@ export const TherapistDashboard: React.FC = () => {
   const getRiskColor = (level: string) => {
     switch (level) {
       case 'critical': return 'text-destructive bg-destructive/10';
-      case 'high': return 'text-orange-500 bg-orange-500/10';
+      case 'high': return 'text-slate-500 bg-slate-500/10';
       case 'medium': return 'text-slate-500 bg-slate-500/10';
       default: return 'text-green-500 bg-green-500/10';
     }
@@ -411,7 +411,7 @@ export const TherapistDashboard: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <div className={`w-3 h-3 rounded-full ${
                             level === 'critical' ? 'bg-destructive' :
-                            level === 'high' ? 'bg-orange-500' :
+                            level === 'high' ? 'bg-slate-500' :
                             level === 'medium' ? 'bg-slate-500' : 'bg-green-500'
                           }`}></div>
                           <span className="text-sm font-medium capitalize">{level}</span>

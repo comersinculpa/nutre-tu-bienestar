@@ -215,7 +215,7 @@ export const MandalasParaColorear: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-4">
-        <div className="w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto">
+        <div className="w-16 h-16 bg-slate-500/10 rounded-full flex items-center justify-center mx-auto">
           <Palette className="w-8 h-8 text-orange-500" />
         </div>
         <h1 className="text-3xl font-bold text-foreground">Mandalas para Colorear</h1>

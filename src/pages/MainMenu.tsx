@@ -97,8 +97,8 @@ const menuOptions: MenuOption[] = [
     icon: Utensils,
     path: '/registro-alimentario',
     category: 'principal',
-    color: 'from-orange-500 to-red-500',
-    gradient: 'bg-gradient-to-br from-orange-500 to-red-500',
+    color: 'from-slate-500 to-slate-600',
+    gradient: 'bg-gradient-to-br from-slate-500 to-slate-600',
     image: vibrantNutrition,
     interactive: true
   },
@@ -109,8 +109,8 @@ const menuOptions: MenuOption[] = [
     icon: AlertCircle,
     path: '/crisis',
     category: 'principal',
-    color: 'from-orange-600 to-red-600',
-    gradient: 'bg-gradient-to-br from-orange-600 to-red-600',
+    color: 'from-slate-600 to-slate-700',
+    gradient: 'bg-gradient-to-br from-slate-600 to-slate-700',
     image: crisisSupportWarm,
     badge: 'Urgente',
     interactive: true
@@ -258,11 +258,11 @@ export default function MainMenu() {
   const regularOptions = menuOptions.filter(option => !option.featured);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-purple-50 pb-24 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 pb-24 relative overflow-hidden">
       {/* Interactive Background Elements */}
       <div className="fixed inset-0 pointer-events-none">
         <div 
-          className="absolute w-96 h-96 bg-gradient-to-br from-orange-400/20 to-pink-400/20 rounded-full blur-3xl transition-transform duration-1000 ease-out"
+          className="absolute w-96 h-96 bg-gradient-to-br from-slate-400/20 to-slate-500/20 rounded-full blur-3xl transition-transform duration-1000 ease-out"
           style={{
             transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`
           }}
@@ -283,16 +283,16 @@ export default function MainMenu() {
 
       {/* Modern Header with Rainbow Accent */}
       <div className="relative overflow-hidden bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-pink-500/5 to-purple-500/5"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-500/5 via-slate-400/5 to-slate-500/5"></div>
         <div className="container mx-auto px-4 py-6 relative">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
-                <div className="w-2 h-2 bg-pink-500 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
-                <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                <div className="w-2 h-2 bg-slate-500 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-slate-600 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-slate-700 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
               </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 bg-clip-text text-transparent">
                 {greeting} ✨
               </h1>
               <p className="text-slate-600 mt-1">¿En qué te puedo acompañar hoy?</p>
@@ -310,14 +310,14 @@ export default function MainMenu() {
             alt="Interactive background" 
             className="w-full h-full object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 via-transparent to-purple-500/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-500/20 via-transparent to-slate-600/20"></div>
         </div>
         <div className="relative container mx-auto px-4 py-16 text-center">
           <div className="max-w-3xl mx-auto">
             <div className="flex justify-center items-center gap-4 mb-6">
-              <Sun className="w-8 h-8 text-orange-500 animate-spin" style={{animationDuration: '8s'}} />
+              <Sun className="w-8 h-8 text-slate-500 animate-spin" style={{animationDuration: '8s'}} />
               <h2 className="text-4xl md:text-5xl font-bold text-slate-800 leading-tight">
-                Tu espacio de <span className="bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">cuidado personal</span>
+                Tu espacio de <span className="bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 bg-clip-text text-transparent">cuidado personal</span>
               </h2>
               <Zap className="w-8 h-8 text-purple-500 animate-bounce" />
             </div>
@@ -327,7 +327,7 @@ export default function MainMenu() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 onClick={() => handleNavigation('/apoyo')}
-                className="bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 text-white px-8 py-3 text-lg rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105"
+                className="bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:from-slate-600 hover:via-slate-700 hover:to-slate-800 text-white px-8 py-3 text-lg rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105"
               >
                 <MessageSquare className="mr-2 h-5 w-5" />
                 Hablar ahora
@@ -335,7 +335,7 @@ export default function MainMenu() {
               <Button 
                 variant="outline" 
                 onClick={() => handleNavigation('/diario-emocional')}
-                className="border-2 border-orange-300 hover:border-orange-400 text-orange-700 px-8 py-3 text-lg rounded-xl hover:bg-orange-50 transition-all duration-300 transform hover:scale-105"
+                className="border-2 border-slate-300 hover:border-slate-400 text-slate-700 px-8 py-3 text-lg rounded-xl hover:bg-slate-50 transition-all duration-300 transform hover:scale-105"
               >
                 <Heart className="mr-2 h-5 w-5" />
                 Registrar emociones
@@ -349,9 +349,9 @@ export default function MainMenu() {
         {/* Featured Tools with Interactive Elements */}
         <section>
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 via-pink-100 to-purple-100 px-4 py-2 rounded-full mb-4">
-              <Sparkles className="h-5 w-5 text-orange-600" />
-              <span className="text-orange-700 font-semibold">Herramientas Destacadas</span>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 px-4 py-2 rounded-full mb-4">
+              <Sparkles className="h-5 w-5 text-slate-600" />
+              <span className="text-slate-700 font-semibold">Herramientas Destacadas</span>
             </div>
             <h3 className="text-2xl font-bold text-slate-800">Tus aliados principales</h3>
           </div>
@@ -409,7 +409,7 @@ export default function MainMenu() {
         {/* Regular Tools Grid with Rainbow Colors */}
         <section>
           <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 bg-clip-text text-transparent mb-2">
               Todas las herramientas
             </h3>
             <p className="text-slate-600">Descubre todo lo que tenemos para acompañarte</p>
@@ -457,7 +457,7 @@ export default function MainMenu() {
                         </Badge>
                       )}
                     </div>
-                    <h4 className="text-lg font-bold text-slate-800 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-orange-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                    <h4 className="text-lg font-bold text-slate-800 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-slate-600 group-hover:to-slate-800 group-hover:bg-clip-text transition-all duration-300">
                       {option.title}
                     </h4>
                     <p className="text-slate-600 text-sm leading-relaxed mb-4">
@@ -470,7 +470,7 @@ export default function MainMenu() {
                         {option.category === 'comunidad' && 'Comunidad'}
                         {option.category === 'seguimiento' && 'Seguimiento'}
                       </span>
-                      <ChevronRight className={`h-4 w-4 text-slate-400 group-hover:text-orange-600 transition-all duration-500 ${isHovered ? 'translate-x-2 scale-125' : ''}`} />
+                      <ChevronRight className={`h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-all duration-500 ${isHovered ? 'translate-x-2 scale-125' : ''}`} />
                     </div>
                   </CardContent>
                 </Card>
@@ -481,8 +481,8 @@ export default function MainMenu() {
 
         {/* Rainbow Call to Action */}
         <section className="text-center">
-          <Card className="max-w-4xl mx-auto bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50 border-orange-200 overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 via-pink-500/10 to-purple-500/10"></div>
+          <Card className="max-w-4xl mx-auto bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 border-slate-200 overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-slate-400/10 to-slate-500/10"></div>
             <CardContent className="p-12 relative z-10">
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <div className="flex-1 text-left">
@@ -496,7 +496,7 @@ export default function MainMenu() {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button 
                       onClick={() => handleNavigation('/apoyo')}
-                      className="bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-300"
+                      className="bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:from-slate-600 hover:via-slate-700 hover:to-slate-800 text-white px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-300"
                     >
                       <MessageSquare className="mr-2 h-5 w-5" />
                       Empezar conversación
@@ -504,14 +504,14 @@ export default function MainMenu() {
                     <Button 
                       variant="outline" 
                       onClick={() => handleNavigation('/recursos')}
-                      className="border-orange-200 text-orange-700 hover:bg-orange-50 px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-300"
+                      className="border-slate-200 text-slate-700 hover:bg-slate-50 px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-300"
                     >
                       <Play className="mr-2 h-4 w-4" />
                       Ver recursos
                     </Button>
                   </div>
                 </div>
-                <div className="w-32 h-32 bg-gradient-to-br from-orange-400 via-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
+                <div className="w-32 h-32 bg-gradient-to-br from-slate-400 via-slate-500 to-slate-600 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
                   <Heart className="w-16 h-16 text-white" />
                 </div>
               </div>

@@ -8,7 +8,7 @@ import { Heart, Plus, Calendar } from 'lucide-react';
 const emotions = [
   { emoji: '😊', name: 'Alegría', color: 'bg-slate-100 text-slate-800' },
   { emoji: '😢', name: 'Tristeza', color: 'bg-blue-100 text-blue-800' },
-  { emoji: '😰', name: 'Ansiedad', color: 'bg-orange-100 text-orange-800' },
+  { emoji: '😰', name: 'Ansiedad', color: 'bg-slate-100 text-slate-800' },
   { emoji: '😡', name: 'Enfado', color: 'bg-red-100 text-red-800' },
   { emoji: '😴', name: 'Cansancio', color: 'bg-purple-100 text-purple-800' },
   { emoji: '🤔', name: 'Confusión', color: 'bg-gray-100 text-gray-800' },

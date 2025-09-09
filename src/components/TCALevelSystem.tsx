@@ -11,7 +11,7 @@ const levels = [
   { id: 3, name: 'Determinado', icon: Shield, color: 'text-green-500', bgColor: 'bg-green-500/10', minPoints: 300, maxPoints: 600 },
   { id: 4, name: 'Valiente', icon: Zap, color: 'text-slate-500', bgColor: 'bg-slate-500/10', minPoints: 600, maxPoints: 1000 },
   { id: 5, name: 'Resiliente', icon: Trophy, color: 'text-purple-500', bgColor: 'bg-purple-500/10', minPoints: 1000, maxPoints: 1500 },
-  { id: 6, name: 'Guerrero', icon: Flame, color: 'text-orange-500', bgColor: 'bg-orange-500/10', minPoints: 1500, maxPoints: 2200 },
+  { id: 6, name: 'Guerrero', icon: Flame, color: 'text-slate-500', bgColor: 'bg-slate-500/10', minPoints: 1500, maxPoints: 2200 },
   { id: 7, name: 'Maestro', icon: Sparkles, color: 'text-indigo-500', bgColor: 'bg-indigo-500/10', minPoints: 2200, maxPoints: 3000 },
   { id: 8, name: 'Mítico', icon: Crown, color: 'text-slate-600', bgColor: 'bg-slate-600/10', minPoints: 3000, maxPoints: Infinity }
 ];
