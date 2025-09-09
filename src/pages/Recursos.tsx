@@ -11,6 +11,7 @@ import { SpotifyIntegration } from '@/components/SpotifyIntegration';
 import { ProgramaHipnosis } from '@/components/ProgramaHipnosis';
 import { MandalasParaColorear } from '@/components/MandalasParaColorear';
 import { JuegosEducativos } from '@/components/JuegosEducativos';
+import { CocinaTerapeutica } from '@/components/CocinaTerapeutica';
 
 // Import icons separately to avoid conflicts
 import { 
@@ -25,7 +26,7 @@ import {
   Brain as BrainIcon 
 } from 'lucide-react';
 
-type SeccionRecurso = 'menu' | 'meditaciones' | 'escritura' | 'respuestas' | 'retos' | 'mandalas' | 'musica' | 'hipnosis' | 'juegos-educativos';
+type SeccionRecurso = 'menu' | 'meditaciones' | 'escritura' | 'respuestas' | 'retos' | 'mandalas' | 'musica' | 'hipnosis' | 'juegos-educativos' | 'cocina-terapeutica';
 
 const recursos = [
   {
@@ -91,6 +92,14 @@ const recursos = [
     descripcion: 'Dinámicas interactivas para el autodescubrimiento en un espacio seguro de reflexión',
     icono: SparklesIcon,
     color: 'bg-teal-50 text-teal-600'
+  },
+  {
+    id: 'cocina-terapeutica',
+    categoria: 'Bienestar',
+    titulo: 'Cocina Terapéutica',
+    descripcion: 'Reconecta con la comida desde el placer y la intuición, sin etiquetas ni control',
+    icono: HeartIcon,
+    color: 'bg-rose-50 text-rose-600'
   }
 ];
 
@@ -117,6 +126,8 @@ export default function Recursos() {
         return <ProgramaHipnosis />;
       case 'juegos-educativos':
         return <JuegosEducativos />;
+      case 'cocina-terapeutica':
+        return <CocinaTerapeutica />;
       default:
         return null;
     }
