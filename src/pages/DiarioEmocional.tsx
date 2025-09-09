@@ -157,13 +157,7 @@ export default function DiarioEmocional() {
 
         {/* Contextual Recommendations based on Analysis */}
         {analysis && (
-          <ContextualRecommendations 
-            risk={analysis.risk}
-            emotions={analysis.emotions}
-            triggers={analysis.triggers}
-            recommendations={analysis.recommendations}
-            needsSupport={analysis.needsSupport}
-          />
+          <ContextualRecommendations />
         )}
 
         {/* Previous Entries Preview */}

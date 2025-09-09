@@ -241,13 +241,7 @@ export default function RegistroAlimentario() {
 
         {/* Contextual Recommendations */}
         {emotionalAnalysis && (
-          <ContextualRecommendations 
-            risk={emotionalAnalysis.risk}
-            emotions={emotionalAnalysis.emotions}
-            triggers={emotionalAnalysis.triggers}
-            recommendations={emotionalAnalysis.recommendations}
-            needsSupport={emotionalAnalysis.needsSupport}
-          />
+          <ContextualRecommendations />
         )}
 
         {/* Food Analysis Suggestions */}

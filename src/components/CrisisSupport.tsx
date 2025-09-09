@@ -1,225 +1,337 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Phone, MessageCircle, Heart, Clock, AlertTriangle } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { AlertTriangle, Phone, Heart, MessageCircle, Shield, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-interface CrisisSupportProps {
-  isVisible: boolean;
-  onClose?: () => void;
+interface CrisisResource {
+  name: string;
+  phone: string;
+  description: string;
+  available: string;
+  type: 'hotline' | 'emergency' | 'text' | 'chat';
+  icon: React.ElementType;
 }
 
-const emergencyContacts = [
+const crisisResources: CrisisResource[] = [
   {
-    name: 'Teléfono de la Esperanza',
-    number: '717 003 717',
-    description: 'Atención emocional y prevención del suicidio',
+    name: 'Línea de Crisis Nacional',
+    phone: '1-800-273-8255',
+    description: 'Apoyo emocional gratuito y confidencial las 24 horas',
     available: '24/7',
-    type: 'phone'
+    type: 'hotline',
+    icon: Phone
   },
   {
-    name: 'Fundación ANAR',
-    number: '900 20 20 10',
-    description: 'Ayuda para adultos y familias en crisis',
+    name: 'Emergencias',
+    phone: '911',
+    description: 'Para situaciones de emergencia médica o riesgo inmediato',
     available: '24/7',
-    type: 'phone'
+    type: 'emergency',
+    icon: AlertTriangle
   },
   {
     name: 'Chat de Crisis',
-    number: 'chat-crisis@ayuda.es',
-    description: 'Apoyo inmediato por chat',
-    available: 'Lun-Dom 10-22h',
-    type: 'chat'
+    phone: 'crisis-chat.org',
+    description: 'Apoyo por chat en tiempo real',
+    available: '24/7',
+    type: 'chat',
+    icon: MessageCircle
+  },
+  {
+    name: 'Línea TCA Especializada',
+    phone: '1-800-931-2237',
+    description: 'Especializada en trastornos de la conducta alimentaria',
+    available: 'Lun-Vie 9AM-9PM',
+    type: 'hotline',
+    icon: Heart
   }
 ];
 
-const immediateTechniques = [
+const copingStrategies = [
   {
-    title: 'Respiración de Emergencia',
-    description: 'Inhala 4 seg, mantén 4 seg, exhala 6 seg',
-    duration: '2 min',
-    action: 'breathing'
+    title: 'Técnica de respiración 4-7-8',
+    description: 'Inhala 4 segundos, mantén 7, exhala 8. Repite 4 veces.',
+    duration: '2-3 minutos'
   },
   {
     title: 'Técnica 5-4-3-2-1',
-    description: '5 cosas que ves, 4 que escuchas, 3 que tocas...',
-    duration: '3 min',
-    action: 'grounding'
+    description: 'Nombra 5 cosas que ves, 4 que tocas, 3 que oyes, 2 que hueles, 1 que saboreas.',
+    duration: '3-5 minutos'
   },
   {
-    title: 'Llamar a un ser querido',
-    description: 'Contacta con alguien de confianza',
-    duration: 'Variable',
-    action: 'contact'
+    title: 'Música calmante',
+    description: 'Escucha una canción que te tranquilice y enfócate en la melodía.',
+    duration: '3-4 minutos'
+  },
+  {
+    title: 'Contacto con agua fría',
+    description: 'Salpica agua fría en tu cara o sostén cubos de hielo.',
+    duration: '1-2 minutos'
   }
 ];
 
-export const CrisisSupport = ({ isVisible, onClose }: CrisisSupportProps) => {
+export function CrisisSupport({ trigger }: { trigger?: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'assessment' | 'resources' | 'coping' | 'followup'>('assessment');
+  const [crisisLevel, setCrisisLevel] = useState<'mild' | 'moderate' | 'severe' | null>(null);
+  const [notes, setNotes] = useState('');
   const { toast } = useToast();
 
-  if (!isVisible) return null;
-
-  const handleEmergencyCall = (contact: typeof emergencyContacts[0]) => {
-    if (contact.type === 'phone') {
-      window.location.href = `tel:${contact.number}`;
-    } else {
-      window.location.href = `mailto:${contact.number}`;
-    }
+  const handleCrisisAssessment = (level: 'mild' | 'moderate' | 'severe') => {
+    setCrisisLevel(level);
     
+    // Log crisis event
+    const crisisLog = JSON.parse(localStorage.getItem('crisis_log') || '[]');
+    crisisLog.push({
+      timestamp: Date.now(),
+      level,
+      notes: notes || 'Sin notas adicionales'
+    });
+    localStorage.setItem('crisis_log', JSON.stringify(crisisLog));
+
+    if (level === 'severe') {
+      setCurrentStep('resources');
+      toast({
+        title: '🚨 Situación crítica detectada',
+        description: 'Por favor, considera buscar ayuda profesional inmediata.',
+        duration: 10000,
+      });
+    } else if (level === 'moderate') {
+      setCurrentStep('coping');
+    } else {
+      setCurrentStep('coping');
+    }
+  };
+
+  const handleResourceUsed = (resource: CrisisResource) => {
+    const resourceLog = JSON.parse(localStorage.getItem('resource_usage') || '[]');
+    resourceLog.push({
+      timestamp: Date.now(),
+      resource: resource.name,
+      type: resource.type
+    });
+    localStorage.setItem('resource_usage', JSON.stringify(resourceLog));
+
     toast({
-      title: `Conectando con ${contact.name}`,
-      description: "Te estamos poniendo en contacto con apoyo profesional",
-      variant: "default"
+      title: '📞 Recurso registrado',
+      description: `Contacto con ${resource.name} registrado.`,
+      duration: 5000,
     });
   };
 
-  const handleImmediateTechnique = (technique: typeof immediateTechniques[0]) => {
-    switch (technique.action) {
-      case 'breathing':
-        toast({
-          title: "Respiración guiada iniciada",
-          description: "Sigue las instrucciones: inhala 4, mantén 4, exhala 6",
-        });
-        break;
-      case 'grounding':
-        toast({
-          title: "Técnica 5-4-3-2-1",
-          description: "Identifica 5 cosas que ves alrededor tuyo...",
-        });
-        break;
-      case 'contact':
-        toast({
-          title: "Contactar ser querido",
-          description: "Es el momento de pedir apoyo a alguien cercano",
-        });
-        break;
-    }
-  };
+  const DefaultTrigger = () => (
+    <Button className="w-full bg-destructive hover:bg-destructive/90 text-destructive-foreground">
+      <AlertTriangle className="w-4 h-4 mr-2" />
+      Necesito apoyo ahora
+    </Button>
+  );
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-background rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        
-        {/* Header */}
-        <Card className="bg-destructive/10 border-destructive rounded-b-none">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-3 text-destructive">
-              <AlertTriangle className="w-6 h-6" />
-              Apoyo Inmediato Disponible
-            </CardTitle>
-            <p className="text-sm text-destructive/80">
-              No estás sola. Hay personas esperando para ayudarte ahora mismo.
-            </p>
-          </CardHeader>
-        </Card>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        {trigger || <DefaultTrigger />}
+      </DialogTrigger>
+      
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-destructive">
+            <Shield className="w-5 h-5" />
+            Apoyo de Crisis
+          </DialogTitle>
+        </DialogHeader>
 
-        {/* Emergency Contacts */}
-        <div className="p-4 space-y-4">
-          <div>
-            <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-              <Phone className="w-5 h-5 text-destructive" />
-              Contacto Inmediato
-            </h3>
-            
+        {currentStep === 'assessment' && (
+          <div className="space-y-4">
+            <Alert>
+              <Heart className="w-4 h-4" />
+              <AlertDescription>
+                Tu seguridad y bienestar son lo más importante. Vamos a encontrar la ayuda que necesitas.
+              </AlertDescription>
+            </Alert>
+
             <div className="space-y-3">
-              {emergencyContacts.map((contact, index) => (
-                <Card key={index} className="border-border">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <h4 className="font-medium text-foreground">{contact.name}</h4>
-                        <p className="text-sm text-muted-foreground">{contact.description}</p>
-                        <div className="flex items-center gap-1 mt-1">
-                          <Clock className="w-3 h-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">{contact.available}</span>
-                        </div>
-                      </div>
-                      <Button
-                        onClick={() => handleEmergencyCall(contact)}
-                        className="bg-destructive hover:bg-destructive/90 ml-3"
-                        size="sm"
-                      >
-                        {contact.type === 'phone' ? (
-                          <>
-                            <Phone className="w-4 h-4 mr-1" />
-                            Llamar
-                          </>
-                        ) : (
-                          <>
-                            <MessageCircle className="w-4 h-4 mr-1" />
-                            Chat
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
+              <h4 className="font-medium">¿Cómo te sientes en este momento?</h4>
+              
+              <Textarea
+                placeholder="Comparte cómo te sientes (opcional, pero puede ayudarnos a darte mejor apoyo)..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="min-h-[80px]"
+              />
 
-          {/* Immediate Techniques */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-              <Heart className="w-5 h-5 text-primary" />
-              Técnicas Inmediatas
-            </h3>
-            
-            <div className="space-y-2">
-              {immediateTechniques.map((technique, index) => (
-                <Card 
-                  key={index} 
-                  className="border-border cursor-pointer hover:bg-muted/50 transition-colors"
-                  onClick={() => handleImmediateTechnique(technique)}
+              <div className="space-y-2">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left h-auto p-4"
+                  onClick={() => handleCrisisAssessment('mild')}
                 >
-                  <CardContent className="p-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <h4 className="font-medium text-foreground text-sm">{technique.title}</h4>
-                        <p className="text-xs text-muted-foreground">{technique.description}</p>
+                  <div>
+                    <div className="font-medium">Me siento abrumada pero segura</div>
+                    <div className="text-sm text-muted-foreground">Necesito técnicas de calma</div>
+                  </div>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left h-auto p-4"
+                  onClick={() => handleCrisisAssessment('moderate')}
+                >
+                  <div>
+                    <div className="font-medium">Tengo pensamientos difíciles</div>
+                    <div className="text-sm text-muted-foreground">Necesito apoyo y estrategias</div>
+                  </div>
+                </Button>
+
+                <Button
+                  variant="destructive"
+                  className="w-full justify-start text-left h-auto p-4"
+                  onClick={() => handleCrisisAssessment('severe')}
+                >
+                  <div>
+                    <div className="font-medium">Estoy en crisis o peligro</div>
+                    <div className="text-sm text-destructive-foreground">Necesito ayuda inmediata</div>
+                  </div>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {currentStep === 'resources' && (
+          <div className="space-y-4">
+            <Alert className="border-destructive/50 bg-destructive/10">
+              <AlertTriangle className="w-4 h-4" />
+              <AlertDescription>
+                <strong>Ayuda inmediata disponible:</strong> No estás sola. Hay profesionales listos para apoyarte.
+              </AlertDescription>
+            </Alert>
+
+            <div className="space-y-3">
+              {crisisResources.map((resource) => (
+                <Card key={resource.name} className="border-border/50">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-lg bg-destructive/10">
+                        <resource.icon className="w-4 h-4 text-destructive" />
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        {technique.duration}
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-medium">{resource.name}</h4>
+                          <Badge variant="outline" className="text-xs">
+                            <Clock className="w-3 h-3 mr-1" />
+                            {resource.available}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          {resource.description}
+                        </p>
+                        <Button
+                          size="sm"
+                          className="w-full"
+                          onClick={() => {
+                            handleResourceUsed(resource);
+                            if (resource.type === 'emergency' || resource.type === 'hotline') {
+                              window.open(`tel:${resource.phone}`, '_self');
+                            } else if (resource.type === 'chat') {
+                              window.open(`https://${resource.phone}`, '_blank');
+                            }
+                          }}
+                        >
+                          {resource.type === 'emergency' || resource.type === 'hotline' ? (
+                            <>
+                              <Phone className="w-4 h-4 mr-2" />
+                              Llamar {resource.phone}
+                            </>
+                          ) : (
+                            <>
+                              <MessageCircle className="w-4 h-4 mr-2" />
+                              Abrir chat
+                            </>
+                          )}
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
-          </div>
 
-          {/* Safety Message */}
-          <Card className="bg-primary/10 border-primary">
-            <CardContent className="p-4">
-              <p className="text-sm text-primary font-medium mb-2">
-                💙 Recuerda: Esta crisis es temporal
-              </p>
-              <p className="text-xs text-primary/80">
-                Los sentimientos intensos pasan. Cada momento que resistes es una victoria. 
-                Tienes herramientas y personas que te apoyan.
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Close Button */}
-          <div className="flex gap-3 pt-4">
-            <Button
-              onClick={() => window.location.href = '/pausa'}
-              className="flex-1 bg-gradient-primary"
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => setCurrentStep('coping')}
             >
-              Ir a Pausa Guiada
+              También mostrar técnicas de calma
             </Button>
-            
-            {onClose && (
-              <Button
-                onClick={onClose}
-                variant="outline"
-              >
-                Cerrar
-              </Button>
-            )}
           </div>
-        </div>
-      </div>
-    </div>
+        )}
+
+        {currentStep === 'coping' && (
+          <div className="space-y-4">
+            <Alert>
+              <Heart className="w-4 h-4" />
+              <AlertDescription>
+                Estas técnicas pueden ayudarte a sentirte más estable. Elige la que más te resuene.
+              </AlertDescription>
+            </Alert>
+
+            <div className="space-y-3">
+              {copingStrategies.map((strategy, index) => (
+                <Card key={index} className="border-border/50">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="font-medium">{strategy.title}</h4>
+                      <Badge variant="secondary" className="text-xs">
+                        {strategy.duration}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {strategy.description}
+                    </p>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => {
+                        toast({
+                          title: '✨ Técnica iniciada',
+                          description: `Comenzando: ${strategy.title}`,
+                          duration: 3000,
+                        });
+                      }}
+                    >
+                      Empezar técnica
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="pt-4 border-t space-y-2">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setCurrentStep('resources')}
+              >
+                Ver recursos de apoyo profesional
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                className="w-full"
+                onClick={() => setIsOpen(false)}
+              >
+                Me siento mejor, cerrar
+              </Button>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
-};
+}

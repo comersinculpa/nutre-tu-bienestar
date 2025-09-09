@@ -9,6 +9,8 @@ import { GamificationPanel } from '@/components/GamificationPanel';
 import { RiskAlerts } from '@/components/RiskAlerts';
 import { MotivationalMessages } from '@/components/MotivationalMessages';
 import { EnhancedAvatar } from '@/components/EnhancedAvatar';
+import { ContextualRecommendations } from '@/components/ContextualRecommendations';
+import { CrisisSupport } from '@/components/CrisisSupport';
 import { useGamification } from '@/hooks/useGamification';
 import { useRiskDetection } from '@/hooks/useRiskDetection';
 import { Link } from 'react-router-dom';
@@ -350,10 +352,7 @@ export default function TCAModule() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full" variant="outline">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Necesito apoyo ahora
-                </Button>
+                <CrisisSupport />
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground">
                     Si sientes que estás en crisis, no dudes en buscar ayuda profesional inmediata.
@@ -361,6 +360,9 @@ export default function TCAModule() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Contextual Recommendations */}
+            <ContextualRecommendations />
           </TabsContent>
         </Tabs>
       </div>
