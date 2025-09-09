@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Heart, BookOpen, Headphones, PenTool, Palette, Music, ArrowLeft, Target, Sparkles, Brain } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { MeditacionesGuiadas } from '@/components/MeditacionesGuiadas';
 import { EscrituraTerapeutica } from '@/components/EscrituraTerapeutica';
 import { RespuestasConscientes } from '@/components/RespuestasConscientes';
@@ -10,6 +10,19 @@ import { RetosAutocuidado } from '@/components/RetosAutocuidado';
 import { SpotifyIntegration } from '@/components/SpotifyIntegration';
 import { ProgramaHipnosis } from '@/components/ProgramaHipnosis';
 import { MandalasParaColorear } from '@/components/MandalasParaColorear';
+
+// Import icons separately to avoid conflicts
+import { 
+  Heart as HeartIcon, 
+  BookOpen as BookOpenIcon, 
+  Headphones as HeadphonesIcon, 
+  PenTool as PenToolIcon, 
+  Palette as PaletteIcon, 
+  Music as MusicIcon, 
+  Target as TargetIcon, 
+  Sparkles as SparklesIcon, 
+  Brain as BrainIcon 
+} from 'lucide-react';
 
 type SeccionRecurso = 'menu' | 'meditaciones' | 'escritura' | 'respuestas' | 'retos' | 'mandalas' | 'musica' | 'hipnosis';
 
@@ -19,7 +32,7 @@ const recursos = [
     categoria: 'Audio',
     titulo: 'Meditaciones Guiadas',
     descripcion: 'Sesiones de meditación para calmar la ansiedad y conectar con tu cuerpo',
-    icono: Headphones,
+    icono: HeadphonesIcon,
     color: 'bg-blue-50 text-blue-600'
   },
   {
@@ -27,7 +40,7 @@ const recursos = [
     categoria: 'Escritura',
     titulo: 'Escritura Terapéutica',
     descripcion: 'Ejercicios de escritura consciente para explorar emociones',
-    icono: PenTool,
+    icono: PenToolIcon,
     color: 'bg-green-50 text-green-600'
   },
   {
@@ -35,7 +48,7 @@ const recursos = [
     categoria: 'Apoyo',
     titulo: 'Respuestas Conscientes',
     descripcion: 'Mensajes de autocompasión para momentos difíciles',
-    icono: Heart,
+    icono: HeartIcon,
     color: 'bg-pink-50 text-pink-600'
   },
   {
@@ -43,7 +56,7 @@ const recursos = [
     categoria: 'Crecimiento',
     titulo: 'Retos de Autocuidado',
     descripcion: 'Desafíos suaves para desarrollar hábitos de bienestar',
-    icono: Target,
+    icono: TargetIcon,
     color: 'bg-purple-50 text-purple-600'
   },
   {
@@ -51,7 +64,7 @@ const recursos = [
     categoria: 'Creatividad',
     titulo: 'Mandalas para Colorear',
     descripcion: 'Actividades creativas para reducir el estrés y encontrar calma',
-    icono: Palette,
+    icono: PaletteIcon,
     color: 'bg-orange-50 text-orange-600'
   },
   {
@@ -59,7 +72,7 @@ const recursos = [
     categoria: 'Música',
     titulo: 'Playlists de Bienestar',
     descripcion: 'Música cuidadosamente seleccionada para diferentes estados emocionales',
-    icono: Music,
+    icono: MusicIcon,
     color: 'bg-indigo-50 text-indigo-600'
   },
   {
@@ -67,7 +80,7 @@ const recursos = [
     categoria: 'Terapia',
     titulo: 'Hipnosis Terapéutica',
     descripcion: 'Sesiones profesionales de hipnosis para transformar tu relación con la comida',
-    icono: Brain,
+    icono: BrainIcon,
     color: 'bg-purple-50 text-purple-600'
   }
 ];
