@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Phone, Headphones, MessageCircle, Heart, Plus, Edit3 } from 'lucide-react';
+import { BreathingAudioPlayer } from '@/components/BreathingAudioPlayer';
 
 const crisisOptions = [
   {
@@ -11,10 +12,7 @@ const crisisOptions = [
     description: 'Escucha 3 minutos de respiración guiada',
     icon: Headphones,
     color: 'bg-secondary',
-    action: () => {
-      // Aquí se reproduciría audio de emergencia
-      console.log('Reproducir audio de calma');
-    }
+    action: 'openAudio'
   },
   {
     id: 'chat',
@@ -35,6 +33,7 @@ export default function NewCrisis() {
   const [emergencyContact, setEmergencyContact] = useState('');
   const [showContactModal, setShowContactModal] = useState(false);
   const [tempContact, setTempContact] = useState('');
+  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   // Cargar contacto de emergencia del localStorage
   useEffect(() => {
@@ -88,11 +87,19 @@ export default function NewCrisis() {
   };
 
   const handleOptionClick = (option: typeof crisisOptions[0]) => {
+    if (option.action === 'openAudio') {
+      setShowAudioPlayer(true);
+      return;
+    }
+    
     // Vibración de confirmación
     if ('vibrate' in navigator) {
       navigator.vibrate([200, 100, 200]);
     }
-    option.action();
+    
+    if (typeof option.action === 'function') {
+      option.action();
+    }
   };
 
   const startBreathing = () => {
@@ -333,6 +340,13 @@ export default function NewCrisis() {
             </CardContent>
           </Card>
         </div>
+      )}
+
+      {/* Audio Player Modal */}
+      {showAudioPlayer && (
+        <BreathingAudioPlayer 
+          onClose={() => setShowAudioPlayer(false)} 
+        />
       )}
     </div>
   );
