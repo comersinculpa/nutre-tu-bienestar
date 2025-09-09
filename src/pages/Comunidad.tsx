@@ -230,7 +230,7 @@ export default function Comunidad() {
               <div className="pt-4">
                 <Button 
                   onClick={() => setIsJoined(true)}
-                  className="w-full bg-gradient-primary text-white"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
                 >
                   Unirme a la comunidad
                 </Button>
