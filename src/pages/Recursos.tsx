@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Heart, BookOpen, Headphones, PenTool, Palette, Music, ArrowLeft, Target, Sparkles } from 'lucide-react';
+import { Heart, BookOpen, Headphones, PenTool, Palette, Music, ArrowLeft, Target, Sparkles, Brain } from 'lucide-react';
 import { MeditacionesGuiadas } from '@/components/MeditacionesGuiadas';
 import { EscrituraTerapeutica } from '@/components/EscrituraTerapeutica';
 import { RespuestasConscientes } from '@/components/RespuestasConscientes';
 import { RetosAutocuidado } from '@/components/RetosAutocuidado';
 import { SpotifyIntegration } from '@/components/SpotifyIntegration';
+import { ProgramaHipnosis } from '@/components/ProgramaHipnosis';
 
-type SeccionRecurso = 'menu' | 'meditaciones' | 'escritura' | 'respuestas' | 'retos' | 'mandalas' | 'musica';
+type SeccionRecurso = 'menu' | 'meditaciones' | 'escritura' | 'respuestas' | 'retos' | 'mandalas' | 'musica' | 'hipnosis';
 
 const recursos = [
   {
@@ -59,6 +60,14 @@ const recursos = [
     descripcion: 'Música cuidadosamente seleccionada para diferentes estados emocionales',
     icono: Music,
     color: 'bg-indigo-50 text-indigo-600'
+  },
+  {
+    id: 'hipnosis',
+    categoria: 'Terapia',
+    titulo: 'Hipnosis Terapéutica',
+    descripcion: 'Sesiones profesionales de hipnosis para transformar tu relación con la comida',
+    icono: Brain,
+    color: 'bg-purple-50 text-purple-600'
   }
 ];
 
@@ -81,6 +90,8 @@ export default function Recursos() {
         return <MandalasParaColorear />;
       case 'musica':
         return <SpotifyIntegration />;
+      case 'hipnosis':
+        return <ProgramaHipnosis />;
       default:
         return null;
     }
