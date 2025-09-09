@@ -38,6 +38,16 @@ const cuestionarios = [
     frequency: 'Trimestral',
     icon: Brain,
     questions: 18
+  },
+  {
+    id: 'relacion-comida',
+    title: 'Descubre tu relación con la comida',
+    description: 'Identifica si eres un comedor emocional, restrictivo o consciente',
+    duration: '5-7 min',
+    lastTaken: null,
+    frequency: 'Mensual',
+    icon: CheckCircle,
+    questions: 10
   }
 ];
 
@@ -93,6 +103,19 @@ const tipoComedorQuestions = [
   "Como más cuando tengo emociones intensas, positivas o negativas"
 ];
 
+const relacionComidaQuestions = [
+  "Cuando como, presto atención a las señales de hambre y saciedad de mi cuerpo",
+  "Como principalmente cuando tengo hambre física, no por otras razones",
+  "Me siento culpable después de comer ciertos alimentos",
+  "Uso la comida para sentirme mejor cuando estoy triste, estresado o aburrido",
+  "Tengo reglas estrictas sobre qué alimentos puedo o no puedo comer",
+  "Disfruto de la comida sin juzgarme a mí mismo por lo que como",
+  "A menudo como más de lo que mi cuerpo necesita",
+  "Paso mucho tiempo pensando en calorías, peso o restricciones alimentarias",
+  "Como de manera equilibrada sin prohibirme alimentos específicos",
+  "Siento ansiedad o estrés relacionado con la comida y las decisiones alimentarias"
+];
+
 const respuestasEAT = [
   { value: '0', label: 'Nunca' },
   { value: '1', label: 'Raramente' },
@@ -118,6 +141,14 @@ const respuestasTipoComedor = [
   { value: '5', label: 'Siempre' }
 ];
 
+const respuestasRelacionComida = [
+  { value: '1', label: 'Nunca' },
+  { value: '2', label: 'Casi nunca' },
+  { value: '3', label: 'A veces' },
+  { value: '4', label: 'Casi siempre' },
+  { value: '5', label: 'Siempre' }
+];
+
 export default function Cuestionarios() {
   const navigate = useNavigate();
   const [selectedCuestionario, setSelectedCuestionario] = useState<string | null>(null);
@@ -137,7 +168,9 @@ export default function Cuestionarios() {
       ? eat40Questions.length 
       : selectedCuestionario === 'bienestar' 
         ? bienestarQuestions.length 
-        : tipoComedorQuestions.length;
+        : selectedCuestionario === 'tipo-comedor'
+          ? tipoComedorQuestions.length
+          : relacionComidaQuestions.length;
     
     if (currentQuestion < questionsLength - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -174,6 +207,32 @@ export default function Cuestionarios() {
     }, 0);
     
     return { externoScore, emocionalScore, totalScore: externoScore + emocionalScore };
+  };
+
+  const calculateRelacionComidaScore = () => {
+    const respuestasArray = Object.values(respuestas).map(value => parseInt(value));
+    
+    // Preguntas que indican Comedor Consciente: 1, 2, 6, 9 (respuestas altas son buenas)
+    const conscienteQuestions = [0, 1, 5, 8];
+    // Preguntas que indican Comedor Emocional: 4, 7 (respuestas altas son problemáticas)  
+    const emocionalQuestions = [3, 6];
+    // Preguntas que indican Comedor Restrictivo: 3, 5, 8, 10 (respuestas altas son problemáticas)
+    const restrictivoQuestions = [2, 4, 7, 9];
+    
+    const conscienteScore = conscienteQuestions.reduce((sum, index) => {
+      return sum + (respuestasArray[index] || 0);
+    }, 0);
+    
+    // Para emocional y restrictivo, puntuación alta indica mayor problemática
+    const emocionalScore = emocionalQuestions.reduce((sum, index) => {
+      return sum + (respuestasArray[index] || 0);
+    }, 0);
+    
+    const restrictivoScore = restrictivoQuestions.reduce((sum, index) => {
+      return sum + (respuestasArray[index] || 0);
+    }, 0);
+    
+    return { conscienteScore, emocionalScore, restrictivoScore };
   };
 
   const getEATInterpretation = (score: number) => {
@@ -364,6 +423,86 @@ export default function Cuestionarios() {
     };
   };
 
+  const getRelacionComidaInterpretation = (scores: { conscienteScore: number; emocionalScore: number; restrictivoScore: number }) => {
+    const { conscienteScore, emocionalScore, restrictivoScore } = scores;
+    
+    // Determinar el tipo dominante
+    let tipoComedor = '';
+    let descripcion = '';
+    let color = '';
+    let bgColor = '';
+    let estrategias: string[] = [];
+    let porcentajes = {
+      consciente: (conscienteScore / 20) * 100, // 4 preguntas x 5 puntos máx
+      emocional: (emocionalScore / 10) * 100,  // 2 preguntas x 5 puntos máx
+      restrictivo: (restrictivoScore / 20) * 100 // 4 preguntas x 5 puntos máx
+    };
+
+    // Lógica para determinar el tipo predominante
+    if (porcentajes.consciente >= 70 && porcentajes.emocional < 60 && porcentajes.restrictivo < 60) {
+      tipoComedor = 'Comedor Consciente';
+      descripcion = 'Tienes una relación saludable con la comida. Escuchas las señales de tu cuerpo, comes con atención plena y disfrutas de la alimentación sin culpa ni restricciones extremas.';
+      color = 'text-success';
+      bgColor = 'bg-success-soft';
+      estrategias = [
+        'Continúa practicando la alimentación consciente',
+        'Mantén tu conexión con las señales de hambre y saciedad',
+        'Sigue disfrutando de la comida sin juicio',
+        'Comparte tus estrategias saludables con otros',
+        'Mantente flexible ante cambios en tu rutina alimentaria'
+      ];
+    } else if (porcentajes.emocional >= 70 || (emocionalScore >= restrictivoScore && emocionalScore >= conscienteScore)) {
+      tipoComedor = 'Comedor Emocional';
+      descripcion = 'Tiendes a usar la comida como una forma de gestionar tus emociones. Comes en respuesta al estrés, tristeza, aburrimiento o celebración, más que por hambre física real.';
+      color = 'text-warning';
+      bgColor = 'bg-warning-soft';
+      estrategias = [
+        'Identifica qué emociones desencadenan el comer emocional',
+        'Desarrolla alternativas saludables para cada emoción (caminar, llamar a alguien, respirar)',
+        'Practica técnicas de pausa antes de comer cuando estés emocional',
+        'Lleva un diario emocional-alimentario para identificar patrones',
+        'Busca apoyo profesional si sientes que no puedes controlarlo'
+      ];
+    } else if (porcentajes.restrictivo >= 70 || (restrictivoScore >= emocionalScore && restrictivoScore >= conscienteScore)) {
+      tipoComedor = 'Comedor Restrictivo';
+      descripcion = 'Tiendes a tener reglas estrictas sobre la comida, sientes culpa al comer ciertos alimentos y pasas mucho tiempo preocupándote por las calorías o el peso. Esta relación puede generar ansiedad.';
+      color = 'text-destructive';
+      bgColor = 'bg-destructive-soft';
+      estrategias = [
+        'Trabaja en reducir las reglas alimentarias rígidas gradualmente',
+        'Practica la autocompasión cuando comes alimentos "prohibidos"',
+        'Considera buscar ayuda de un profesional especializado en alimentación',
+        'Enfócate en cómo te sientes en lugar de en las calorías',
+        'Desafía los pensamientos negativos sobre la comida y tu cuerpo'
+      ];
+    } else {
+      tipoComedor = 'Comedor Mixto';
+      descripcion = 'Tu relación con la comida combina diferentes patrones. A veces comes conscientemente, otras emocionalmente, y ocasionalmente de forma restrictiva. Es normal tener variaciones según las circunstancias.';
+      color = 'text-primary';
+      bgColor = 'bg-primary-soft';
+      estrategias = [
+        'Trabaja en identificar qué situaciones activan cada patrón',
+        'Desarrolla estrategias específicas para tus momentos más desafiantes',
+        'Practica la alimentación consciente como base',
+        'Sé compasivo contigo mismo durante el proceso de cambio',
+        'Considera qué área te gustaría mejorar primero'
+      ];
+    }
+
+    return {
+      tipoComedor,
+      descripcion,
+      color,
+      bgColor,
+      porcentajes: {
+        consciente: Math.round(porcentajes.consciente),
+        emocional: Math.round(porcentajes.emocional),
+        restrictivo: Math.round(porcentajes.restrictivo)
+      },
+      estrategias
+    };
+  };
+
   const resetQuestionario = () => {
     setShowResults(false);
     setSelectedCuestionario(null);
@@ -424,6 +563,109 @@ export default function Cuestionarios() {
                     <span className="text-sm font-bold text-primary">{interpretation.emocionalPercentage}%</span>
                   </div>
                   <Progress value={interpretation.emocionalPercentage} className="h-2" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-card">
+              <CardHeader>
+                <CardTitle className="font-heading text-foreground">
+                  Estrategias personalizadas
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {interpretation.estrategias.map((estrategia, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+                      <p className="text-sm text-muted-foreground">{estrategia}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex gap-3">
+              <Button 
+                onClick={() => navigate('/recursos')}
+                className="flex-1 bg-gradient-primary text-white"
+              >
+                Ver recursos
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={resetQuestionario}
+                className="flex-1"
+              >
+                Continuar
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Resultados para Relación con la Comida
+  if (showResults && selectedCuestionario === 'relacion-comida') {
+    const scores = calculateRelacionComidaScore();
+    const interpretation = getRelacionComidaInterpretation(scores);
+
+    return (
+      <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+        <div className="max-w-md mx-auto">
+          <div className="flex items-center justify-between mb-6 pt-4">
+            <Button variant="ghost" size="sm" onClick={resetQuestionario}>
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <h1 className="font-heading text-lg font-medium text-foreground">
+              Tu Relación con la Comida
+            </h1>
+            <div></div>
+          </div>
+
+          <div className="space-y-6">
+            <Card className={`${interpretation.bgColor} border-0`}>
+              <CardContent className="p-6 text-center">
+                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-10 h-10 text-white" />
+                </div>
+                <h3 className={`font-heading text-lg font-semibold mb-2 ${interpretation.color}`}>
+                  {interpretation.tipoComedor}
+                </h3>
+                <p className={`text-sm leading-relaxed ${interpretation.color}`}>
+                  {interpretation.descripcion}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-card">
+              <CardHeader>
+                <CardTitle className="font-heading text-foreground">
+                  Análisis detallado
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium">Alimentación Consciente</span>
+                    <span className="text-sm font-bold text-success">{interpretation.porcentajes.consciente}%</span>
+                  </div>
+                  <Progress value={interpretation.porcentajes.consciente} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium">Patrón Emocional</span>
+                    <span className="text-sm font-bold text-warning">{interpretation.porcentajes.emocional}%</span>
+                  </div>
+                  <Progress value={interpretation.porcentajes.emocional} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium">Patrón Restrictivo</span>
+                    <span className="text-sm font-bold text-destructive">{interpretation.porcentajes.restrictivo}%</span>
+                  </div>
+                  <Progress value={interpretation.porcentajes.restrictivo} className="h-2" />
                 </div>
               </CardContent>
             </Card>
@@ -620,13 +862,17 @@ export default function Cuestionarios() {
       ? eat40Questions 
       : selectedCuestionario === 'bienestar' 
         ? bienestarQuestions 
-        : tipoComedorQuestions;
+        : selectedCuestionario === 'tipo-comedor'
+          ? tipoComedorQuestions
+          : relacionComidaQuestions;
     
     const respuestasOptions = selectedCuestionario === 'eat-40' 
       ? respuestasEAT 
       : selectedCuestionario === 'bienestar' 
         ? respuestasBienestar 
-        : respuestasTipoComedor;
+        : selectedCuestionario === 'tipo-comedor'
+          ? respuestasTipoComedor
+          : respuestasRelacionComida;
     
     const progress = ((currentQuestion + 1) / questions.length) * 100;
 
@@ -642,7 +888,9 @@ export default function Cuestionarios() {
                 ? 'EAT-40' 
                 : selectedCuestionario === 'bienestar' 
                   ? 'Bienestar Emocional' 
-                  : 'Tipo de Comedor'}
+                  : selectedCuestionario === 'tipo-comedor'
+                    ? 'Tipo de Comedor'
+                    : 'Relación con la Comida'}
             </h1>
             <div className="text-sm text-muted-foreground">
               {currentQuestion + 1}/{questions.length}
