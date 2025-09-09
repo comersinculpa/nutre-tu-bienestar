@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { ArrowLeft, FileText, CheckCircle, Calendar, Heart } from 'lucide-react';
+import { ArrowLeft, FileText, CheckCircle, Calendar, Heart, Brain } from 'lucide-react';
 import { Avatar } from '@/components/Avatar';
 
 const cuestionarios = [
@@ -28,6 +28,16 @@ const cuestionarios = [
     frequency: 'Semanal',
     icon: Heart,
     questions: 15
+  },
+  {
+    id: 'tipo-comedor',
+    title: '¿Qué tipo de comedor eres?',
+    description: 'Basado en el Cuestionario de Comedor Emocional de Garaulet (CCE)',
+    duration: '8-10 min',
+    lastTaken: null,
+    frequency: 'Trimestral',
+    icon: Brain,
+    questions: 18
   }
 ];
 
@@ -62,6 +72,27 @@ const bienestarQuestions = [
   "Me siento capaz de adaptarme a los cambios y transiciones"
 ];
 
+const tipoComedorQuestions = [
+  "Cuando veo comida apetitosa, siento la necesidad de comerla aunque no tenga hambre",
+  "Como más cuando estoy estresado/a o ansioso/a",
+  "Si veo a otros comiendo, me dan ganas de comer también",
+  "Cuando estoy triste o deprimido/a, busco comida para sentirme mejor",
+  "Me resulta difícil resistir la comida cuando la huelo o la veo",
+  "Como más de lo habitual cuando estoy aburrido/a",
+  "La publicidad de comida me influye para querer comer",
+  "Cuando estoy enfadado/a o irritado/a, tiendo a comer más",
+  "Si hay comida disponible en mi entorno, siento la tentación de comerla",
+  "Como para celebrar cuando estoy contento/a o emocionado/a",
+  "Me resulta difícil parar de comer una vez que empiezo",
+  "Uso la comida como recompensa cuando he tenido un buen día",
+  "Como más en situaciones sociales, aunque no tenga hambre",
+  "Cuando algo me preocupa, busco comida para distraerme",
+  "Si veo mi comida favorita, la como aunque haya comido recientemente",
+  "Como cuando me siento solo/a o necesito compañía",
+  "Me influye mucho el ambiente donde como (restaurantes, fiestas, etc.)",
+  "Como más cuando tengo emociones intensas, positivas o negativas"
+];
+
 const respuestasEAT = [
   { value: '0', label: 'Nunca' },
   { value: '1', label: 'Raramente' },
@@ -79,6 +110,14 @@ const respuestasBienestar = [
   { value: '5', label: 'Totalmente de acuerdo' }
 ];
 
+const respuestasTipoComedor = [
+  { value: '1', label: 'Nunca' },
+  { value: '2', label: 'Raramente' },
+  { value: '3', label: 'A veces' },
+  { value: '4', label: 'Frecuentemente' },
+  { value: '5', label: 'Siempre' }
+];
+
 export default function Cuestionarios() {
   const navigate = useNavigate();
   const [selectedCuestionario, setSelectedCuestionario] = useState<string | null>(null);
@@ -94,7 +133,12 @@ export default function Cuestionarios() {
   };
 
   const nextQuestion = () => {
-    const questionsLength = selectedCuestionario === 'eat-40' ? eat40Questions.length : bienestarQuestions.length;
+    const questionsLength = selectedCuestionario === 'eat-40' 
+      ? eat40Questions.length 
+      : selectedCuestionario === 'bienestar' 
+        ? bienestarQuestions.length 
+        : tipoComedorQuestions.length;
+    
     if (currentQuestion < questionsLength - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
@@ -110,6 +154,26 @@ export default function Cuestionarios() {
   const calculateBienestarScore = () => {
     const score = Object.values(respuestas).reduce((sum, value) => sum + parseInt(value), 0);
     return score;
+  };
+
+  const calculateTipoComedorScore = () => {
+    const respuestasArray = Object.values(respuestas).map(value => parseInt(value));
+    
+    // Categorizar preguntas por tipo
+    // Comedor Externo: preguntas 1,3,5,7,9,11,13,15,17 (influenciado por estímulos externos)
+    const externoQuestions = [0,2,4,6,8,10,12,14,16];
+    // Comedor Emocional: preguntas 2,4,6,8,10,12,14,16,18 (come por emociones)
+    const emocionalQuestions = [1,3,5,7,9,11,13,15,17];
+    
+    const externoScore = externoQuestions.reduce((sum, index) => {
+      return sum + (respuestasArray[index] || 0);
+    }, 0);
+    
+    const emocionalScore = emocionalQuestions.reduce((sum, index) => {
+      return sum + (respuestasArray[index] || 0);
+    }, 0);
+    
+    return { externoScore, emocionalScore, totalScore: externoScore + emocionalScore };
   };
 
   const getEATInterpretation = (score: number) => {
@@ -215,12 +279,193 @@ export default function Cuestionarios() {
     }
   };
 
+  const getTipoComedorInterpretation = (scores: { externoScore: number; emocionalScore: number; totalScore: number }) => {
+    const { externoScore, emocionalScore } = scores;
+    const externoPercentage = (externoScore / 45) * 100; // 9 preguntas x 5 puntos máx
+    const emocionalPercentage = (emocionalScore / 45) * 100; // 9 preguntas x 5 puntos máx
+    
+    let tipoComedor = '';
+    let descripcion = '';
+    let color = '';
+    let bgColor = '';
+    let estrategias: string[] = [];
+    
+    if (externoScore > emocionalScore) {
+      if (externoPercentage >= 70) {
+        tipoComedor = 'Comedor Externo Intenso';
+        descripcion = 'Te influyen mucho los estímulos externos como ver comida, olores, publicidad o el ambiente. Comes principalmente por factores del entorno, no por hambre real.';
+        color = 'text-warning';
+        bgColor = 'bg-warning-soft';
+        estrategias = [
+          'Evita tener comida visible en casa y trabajo',
+          'Planifica tus comidas y snacks con anticipación',
+          'Practica mindful eating para conectar con tu hambre real',
+          'Usa técnicas de distracción cuando veas comida tentadora',
+          'Come en ambientes tranquilos sin distracciones'
+        ];
+      } else {
+        tipoComedor = 'Comedor Externo Moderado';
+        descripcion = 'Algunas veces te influyen los estímulos externos, pero tienes cierto control sobre tus impulsos alimentarios.';
+        color = 'text-primary';
+        bgColor = 'bg-primary-soft';
+        estrategias = [
+          'Sé consciente de los momentos donde más te influyen los estímulos',
+          'Practica técnicas de pausa antes de comer impulsivamente',
+          'Organiza tu entorno para reducir tentaciones',
+          'Desarrolla estrategias específicas para situaciones sociales'
+        ];
+      }
+    } else if (emocionalScore > externoScore) {
+      if (emocionalPercentage >= 70) {
+        tipoComedor = 'Comedor Emocional Intenso';
+        descripcion = 'Usas la comida como manera principal de gestionar tus emociones, tanto positivas como negativas. Tu estado emocional determina cuándo y cuánto comes.';
+        color = 'text-destructive';
+        bgColor = 'bg-destructive-soft';
+        estrategias = [
+          'Identifica qué emociones te llevan a comer más frecuentemente',
+          'Desarrolla alternativas saludables para gestionar emociones',
+          'Practica técnicas de regulación emocional (respiración, mindfulness)',
+          'Considera buscar apoyo psicológico especializado',
+          'Lleva un diario emocional-alimentario para identificar patrones'
+        ];
+      } else {
+        tipoComedor = 'Comedor Emocional Moderado';
+        descripcion = 'A veces usas la comida para gestionar emociones, pero también puedes comer por hambre física. Tienes cierta conciencia sobre este patrón.';
+        color = 'text-warning';
+        bgColor = 'bg-warning-soft';
+        estrategias = [
+          'Practica la pausa consciente antes de comer cuando estés emocional',
+          'Desarrolla una lista de actividades alternativas para cada emoción',
+          'Aprende técnicas básicas de gestión emocional',
+          'Usa nuestros recursos de detección de hambre emocional'
+        ];
+      }
+    } else {
+      tipoComedor = 'Comedor Equilibrado';
+      descripcion = 'Tienes un patrón alimentario relativamente equilibrado. Aunque a veces te pueden influir factores externos o emocionales, generalmente comes por hambre física.';
+      color = 'text-success';
+      bgColor = 'bg-success-soft';
+      estrategias = [
+        'Mantén tus buenos hábitos alimentarios actuales',
+        'Sigue practicando la alimentación consciente',
+        'Mantente atento a cambios en tus patrones por estrés o cambios vitales',
+        'Comparte tus estrategias saludables con otros'
+      ];
+    }
+    
+    return {
+      tipoComedor,
+      descripcion,
+      color,
+      bgColor,
+      externoPercentage: Math.round(externoPercentage),
+      emocionalPercentage: Math.round(emocionalPercentage),
+      estrategias
+    };
+  };
+
   const resetQuestionario = () => {
     setShowResults(false);
     setSelectedCuestionario(null);
     setCurrentQuestion(0);
     setRespuestas({});
   };
+
+  // Resultados para Tipo de Comedor
+  if (showResults && selectedCuestionario === 'tipo-comedor') {
+    const scores = calculateTipoComedorScore();
+    const interpretation = getTipoComedorInterpretation(scores);
+
+    return (
+      <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+        <div className="max-w-md mx-auto">
+          <div className="flex items-center justify-between mb-6 pt-4">
+            <Button variant="ghost" size="sm" onClick={resetQuestionario}>
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <h1 className="font-heading text-lg font-medium text-foreground">
+              Tu Tipo de Comedor
+            </h1>
+            <div></div>
+          </div>
+
+          <div className="space-y-6">
+            <Card className={`${interpretation.bgColor} border-0`}>
+              <CardContent className="p-6 text-center">
+                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Brain className="w-10 h-10 text-white" />
+                </div>
+                <h3 className={`font-heading text-lg font-semibold mb-2 ${interpretation.color}`}>
+                  {interpretation.tipoComedor}
+                </h3>
+                <p className={`text-sm leading-relaxed ${interpretation.color}`}>
+                  {interpretation.descripcion}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-card">
+              <CardHeader>
+                <CardTitle className="font-heading text-foreground">
+                  Análisis detallado
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium">Comedor Externo</span>
+                    <span className="text-sm font-bold text-primary">{interpretation.externoPercentage}%</span>
+                  </div>
+                  <Progress value={interpretation.externoPercentage} className="h-2" />
+                </div>
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium">Comedor Emocional</span>
+                    <span className="text-sm font-bold text-primary">{interpretation.emocionalPercentage}%</span>
+                  </div>
+                  <Progress value={interpretation.emocionalPercentage} className="h-2" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-card">
+              <CardHeader>
+                <CardTitle className="font-heading text-foreground">
+                  Estrategias personalizadas
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {interpretation.estrategias.map((estrategia, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+                      <p className="text-sm text-muted-foreground">{estrategia}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex gap-3">
+              <Button 
+                onClick={() => navigate('/recursos')}
+                className="flex-1 bg-gradient-primary text-white"
+              >
+                Ver recursos
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={resetQuestionario}
+                className="flex-1"
+              >
+                Continuar
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Resultados para Bienestar Emocional
   if (showResults && selectedCuestionario === 'bienestar') {
@@ -371,8 +616,18 @@ export default function Cuestionarios() {
 
   // Vista del cuestionario activo
   if (selectedCuestionario) {
-    const questions = selectedCuestionario === 'eat-40' ? eat40Questions : bienestarQuestions;
-    const respuestasOptions = selectedCuestionario === 'eat-40' ? respuestasEAT : respuestasBienestar;
+    const questions = selectedCuestionario === 'eat-40' 
+      ? eat40Questions 
+      : selectedCuestionario === 'bienestar' 
+        ? bienestarQuestions 
+        : tipoComedorQuestions;
+    
+    const respuestasOptions = selectedCuestionario === 'eat-40' 
+      ? respuestasEAT 
+      : selectedCuestionario === 'bienestar' 
+        ? respuestasBienestar 
+        : respuestasTipoComedor;
+    
     const progress = ((currentQuestion + 1) / questions.length) * 100;
 
     return (
@@ -383,7 +638,11 @@ export default function Cuestionarios() {
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <h1 className="font-heading text-lg font-medium text-foreground">
-              {selectedCuestionario === 'eat-40' ? 'EAT-40' : 'Bienestar Emocional'}
+              {selectedCuestionario === 'eat-40' 
+                ? 'EAT-40' 
+                : selectedCuestionario === 'bienestar' 
+                  ? 'Bienestar Emocional' 
+                  : 'Tipo de Comedor'}
             </h1>
             <div className="text-sm text-muted-foreground">
               {currentQuestion + 1}/{questions.length}
