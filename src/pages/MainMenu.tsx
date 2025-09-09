@@ -158,8 +158,8 @@ const menuOptions: MenuOption[] = [
     icon: CheckCircle,
     path: '/check-in',
     category: 'bienestar',
-    color: 'from-amber-500 to-orange-500',
-    gradient: 'bg-gradient-to-br from-amber-500 to-orange-500'
+    color: 'from-slate-500 to-slate-600',
+    gradient: 'bg-gradient-to-br from-slate-500 to-slate-600'
   },
 
   // Community with coral and magenta
@@ -191,8 +191,8 @@ const menuOptions: MenuOption[] = [
     icon: GamepadIcon,
     path: '/juegos',
     category: 'comunidad',
-    color: 'from-yellow-500 to-orange-500',
-    gradient: 'bg-gradient-to-br from-yellow-500 to-orange-500',
+    color: 'from-slate-600 to-slate-700',
+    gradient: 'bg-gradient-to-br from-slate-600 to-slate-700',
     image: interactiveGames,
     interactive: true
   },

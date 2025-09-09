@@ -9,11 +9,11 @@ const levels = [
   { id: 1, name: 'Principiante', icon: Heart, color: 'text-pink-500', bgColor: 'bg-pink-500/10', minPoints: 0, maxPoints: 100 },
   { id: 2, name: 'Explorador', icon: Star, color: 'text-blue-500', bgColor: 'bg-blue-500/10', minPoints: 100, maxPoints: 300 },
   { id: 3, name: 'Determinado', icon: Shield, color: 'text-green-500', bgColor: 'bg-green-500/10', minPoints: 300, maxPoints: 600 },
-  { id: 4, name: 'Valiente', icon: Zap, color: 'text-yellow-500', bgColor: 'bg-yellow-500/10', minPoints: 600, maxPoints: 1000 },
+  { id: 4, name: 'Valiente', icon: Zap, color: 'text-slate-500', bgColor: 'bg-slate-500/10', minPoints: 600, maxPoints: 1000 },
   { id: 5, name: 'Resiliente', icon: Trophy, color: 'text-purple-500', bgColor: 'bg-purple-500/10', minPoints: 1000, maxPoints: 1500 },
   { id: 6, name: 'Guerrero', icon: Flame, color: 'text-orange-500', bgColor: 'bg-orange-500/10', minPoints: 1500, maxPoints: 2200 },
   { id: 7, name: 'Maestro', icon: Sparkles, color: 'text-indigo-500', bgColor: 'bg-indigo-500/10', minPoints: 2200, maxPoints: 3000 },
-  { id: 8, name: 'Mítico', icon: Crown, color: 'text-amber-500', bgColor: 'bg-amber-500/10', minPoints: 3000, maxPoints: Infinity }
+  { id: 8, name: 'Mítico', icon: Crown, color: 'text-slate-600', bgColor: 'bg-slate-600/10', minPoints: 3000, maxPoints: Infinity }
 ];
 
 export const TCALevelSystem: React.FC = () => {
@@ -63,7 +63,7 @@ export const TCALevelSystem: React.FC = () => {
           
           {currentLevel.id === 8 && (
             <div className="text-center py-4">
-              <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
+              <Badge className="bg-slate-500/20 text-slate-600 border-slate-500/30">
                 ¡Nivel Máximo Alcanzado! 🎉
               </Badge>
               <p className="text-sm text-muted-foreground mt-2">

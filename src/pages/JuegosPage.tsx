@@ -32,7 +32,7 @@ const games = [
     icon: Lightbulb,
     difficulty: 'Medio',
     duration: '15-20 min',
-    color: 'bg-gradient-to-br from-amber-500 to-orange-400'
+    color: 'bg-gradient-to-br from-slate-500 to-slate-600'
   },
   {
     id: 'roles-critica-interna',
@@ -95,7 +95,7 @@ export default function JuegosPage() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Fácil': return 'bg-green-100 text-green-800';
-      case 'Medio': return 'bg-yellow-100 text-yellow-800';
+      case 'Medio': return 'bg-slate-100 text-slate-800';
       case 'Avanzado': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
