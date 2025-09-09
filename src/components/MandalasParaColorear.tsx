@@ -158,7 +158,7 @@ export const MandalasParaColorear: React.FC = () => {
           <div className="relative">
             {showPreview ? (
               <div 
-                className="w-full h-48 border-2 border-dashed border-muted rounded-lg bg-white flex items-center justify-center cursor-pointer"
+                className="w-full h-48 border-2 border-dashed border-muted rounded-lg bg-background-submenu flex items-center justify-center cursor-pointer"
                 onClick={() => setShowPreview(false)}
                 dangerouslySetInnerHTML={{ __html: createMandalaContent(design) }}
               />
@@ -215,8 +215,8 @@ export const MandalasParaColorear: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-4">
-        <div className="w-16 h-16 bg-slate-500/10 rounded-full flex items-center justify-center mx-auto">
-          <Palette className="w-8 h-8 text-orange-500" />
+        <div className="w-16 h-16 bg-sage-100 rounded-full flex items-center justify-center mx-auto">
+          <Palette className="w-8 h-8 text-sage-600" />
         </div>
         <h1 className="text-3xl font-bold text-foreground">Mandalas para Colorear</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">

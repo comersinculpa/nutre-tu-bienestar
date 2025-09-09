@@ -147,7 +147,7 @@ export default function Recursos() {
 
   if (seccionActiva !== 'menu') {
     return (
-      <div className="min-h-screen bg-background pb-20">
+      <div className="min-h-screen bg-background-subpage pb-20">
         <div className="container mx-auto px-4 pt-8 space-y-6">
           <Button 
             variant="ghost" 
@@ -165,7 +165,7 @@ export default function Recursos() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background-subpage pb-20">
       <div className="container mx-auto px-4 pt-8 space-y-8">
         <div className="text-center space-y-4">
           <h1 className="text-3xl font-bold text-foreground">Recursos de Bienestar</h1>

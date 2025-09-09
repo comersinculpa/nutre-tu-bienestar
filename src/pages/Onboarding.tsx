@@ -151,7 +151,7 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-calm p-4 flex items-center">
+    <div className="min-h-screen bg-background-subpage p-4 flex items-center">
       <div className="w-full max-w-md mx-auto">
         <div className="mb-6">
           <div className="flex gap-2 mb-4">

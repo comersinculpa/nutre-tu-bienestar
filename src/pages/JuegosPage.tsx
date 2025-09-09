@@ -102,7 +102,7 @@ export default function JuegosPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background-subpage pb-24">
       {/* Header */}
       <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-b border-border">
         <div className="container mx-auto px-4 py-6">

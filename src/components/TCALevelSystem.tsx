@@ -63,7 +63,7 @@ export const TCALevelSystem: React.FC = () => {
           
           {currentLevel.id === 8 && (
             <div className="text-center py-4">
-              <Badge className="bg-slate-500/20 text-slate-600 border-slate-500/30">
+              <Badge className="bg-sage-200 text-sage-700 border-sage-300">
                 ¡Nivel Máximo Alcanzado! 🎉
               </Badge>
               <p className="text-sm text-muted-foreground mt-2">

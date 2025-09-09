@@ -110,7 +110,9 @@ export default function NewCrisis() {
         return 'Exhala lentamente...';
     }
   };
-  return <div className="min-h-screen bg-background pb-24">
+
+  return (
+    <div className="min-h-screen bg-background-subpage pb-24">
       <div className="container mx-auto px-4 pt-8 space-y-8">
         {/* Header urgente pero calmado */}
         <div className="text-center space-y-4 animate-fade-in">
@@ -283,5 +285,6 @@ export default function NewCrisis() {
 
       {/* Audio Player Modal */}
       {showAudioPlayer && <BreathingAudioPlayer onClose={() => setShowAudioPlayer(false)} />}
-    </div>;
+    </div>
+  );
 }

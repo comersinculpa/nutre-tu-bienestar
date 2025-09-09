@@ -180,7 +180,7 @@ export default function TCAModule() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-calm pb-20">
+    <div className="min-h-screen bg-background-subpage pb-20">
       {/* Header */}
       <div className="px-6 py-4">
         <div className="flex items-center justify-between mb-6 pt-4">

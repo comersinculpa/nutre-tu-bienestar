@@ -311,7 +311,7 @@ export const SpotifyIntegration: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           {SPOTIFY_CLIENT_ID === 'YOUR_SPOTIFY_CLIENT_ID' ? (
-            <Alert className="border-slate-500/20 bg-slate-500/10">
+            <Alert className="border-sage-300 bg-sage-100">
               <Settings className="h-4 w-4" />
               <AlertDescription>
                 <strong>Configuración requerida:</strong> Para habilitar la integración con Spotify, necesitas:

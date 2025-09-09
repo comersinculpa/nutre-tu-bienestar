@@ -76,7 +76,7 @@ export default function Dashboard() {
   const activeAlerts = getActiveAlerts();
 
   return (
-    <div className="min-h-screen bg-gradient-calm pb-20">
+    <div className="min-h-screen bg-background-subpage pb-20">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-primary">
         <div className="absolute inset-0">

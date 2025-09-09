@@ -111,7 +111,7 @@ export default function Pausa() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-calm p-4">
+    <div className="min-h-screen bg-background-subpage p-4">
       <div className="max-w-md mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 pt-4">

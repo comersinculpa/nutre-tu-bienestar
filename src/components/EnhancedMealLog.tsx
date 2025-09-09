@@ -234,7 +234,7 @@ export const EnhancedMealLog: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-calm pb-20">
+    <div className="min-h-screen bg-background-subpage pb-20">
       <div className="px-6 py-4">
         <div className="mb-6 pt-4">
           <h1 className="font-heading text-2xl font-bold text-foreground mb-2">

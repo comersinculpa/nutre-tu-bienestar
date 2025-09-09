@@ -59,7 +59,7 @@ export default function NewIndex() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24 relative overflow-hidden">
+    <div className="min-h-screen bg-background-subpage pb-24 relative overflow-hidden">
       {/* Elementos decorativos de fondo mejorados */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-5 w-32 h-32 bg-primary/3 rounded-full blur-3xl animate-float"></div>

@@ -119,8 +119,8 @@ export function JuegoRolesCriticaInterna() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-lg">
-              <p className="text-sm text-orange-800">
+            <div className="bg-background-submenu p-4 rounded-lg">
+              <p className="text-sm text-sage-700">
                 <Lightbulb className="w-4 h-4 inline mr-2" />
                 <strong>Recuerda:</strong> Este ejercicio te entrena para interrumpir activamente los ciclos 
                 de autocrítica. Al desarrollar una voz interna compasiva, construyes resiliencia emocional 

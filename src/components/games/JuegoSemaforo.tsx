@@ -108,8 +108,8 @@ export function JuegoSemaforo() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-lg">
-              <p className="text-sm text-slate-800">
+            <div className="bg-background-submenu p-4 rounded-lg">
+              <p className="text-sm text-foreground">
                 <Lightbulb className="w-4 h-4 inline mr-2" />
                 <strong>Recuerda:</strong> Puedes usar esta herramienta varias veces al día. 
                 Simplemente pregúntate: "¿En qué color estoy ahora?". Este chequeo aumenta 
@@ -206,7 +206,7 @@ export function JuegoSemaforo() {
                 Identificando momentos - Amarillo
               </Badge>
 
-              <Card className="bg-slate-50 border-slate-200">
+              <Card className="bg-background-submenu border-sage-200">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Circle className="w-4 h-4 fill-slate-500 text-slate-500" />

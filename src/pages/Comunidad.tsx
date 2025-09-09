@@ -175,7 +175,7 @@ export default function Comunidad() {
 
   if (!isJoined) {
     return (
-      <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+      <div className="min-h-screen bg-background-subpage p-4 pb-20">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-6 pt-4">
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
@@ -258,7 +258,7 @@ export default function Comunidad() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+    <div className="min-h-screen bg-background-subpage p-4 pb-20">
       <div className="max-w-md mx-auto">
         <div className="flex items-center justify-between mb-6 pt-4">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>

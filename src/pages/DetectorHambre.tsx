@@ -139,7 +139,7 @@ export default function DetectorHambre() {
     const ResultIcon = resultData.icon;
 
     return (
-      <div className="min-h-screen bg-gradient-calm pb-20">
+      <div className="min-h-screen bg-background-subpage pb-20">
         <div className="px-6 py-6 space-y-6">
           <div className="text-center pt-4">
             <h1 className="text-2xl font-bold text-foreground mb-2">
@@ -208,7 +208,7 @@ export default function DetectorHambre() {
   const question = questions[currentQuestion];
 
   return (
-    <div className="min-h-screen bg-gradient-calm pb-20">
+    <div className="min-h-screen bg-background-subpage pb-20">
       <div className="px-6 py-6 space-y-6">
         <div className="text-center pt-4">
           <h1 className="text-2xl font-bold text-foreground mb-2">

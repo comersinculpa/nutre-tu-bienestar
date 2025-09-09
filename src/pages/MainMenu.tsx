@@ -276,7 +276,7 @@ export default function MainMenu() {
       </div>
 
       {/* Modern Header with Rainbow Accent */}
-      <div className="relative overflow-hidden bg-white/80 backdrop-blur-md border-b border-slate-200">
+      <div className="relative overflow-hidden bg-background-subpage/90 backdrop-blur-md border-b border-sage-200">
         <div className="absolute inset-0 bg-gradient-to-r from-green-400/5 via-blue-300/5 to-purple-300/5"></div>
         <div className="container mx-auto px-4 py-6 relative">
           <div className="flex items-center justify-between">

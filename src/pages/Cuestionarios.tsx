@@ -516,7 +516,7 @@ export default function Cuestionarios() {
     const interpretation = getTipoComedorInterpretation(scores);
 
     return (
-      <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+      <div className="min-h-screen bg-background-subpage p-4 pb-20">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-6 pt-4">
             <Button variant="ghost" size="sm" onClick={resetQuestionario}>
@@ -612,7 +612,7 @@ export default function Cuestionarios() {
     const interpretation = getRelacionComidaInterpretation(scores);
 
     return (
-      <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+      <div className="min-h-screen bg-background-subpage p-4 pb-20">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-6 pt-4">
             <Button variant="ghost" size="sm" onClick={resetQuestionario}>
@@ -715,7 +715,7 @@ export default function Cuestionarios() {
     const interpretation = getBienestarInterpretation(score);
 
     return (
-      <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+      <div className="min-h-screen bg-background-subpage p-4 pb-20">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-6 pt-4">
             <Button variant="ghost" size="sm" onClick={resetQuestionario}>
@@ -790,7 +790,7 @@ export default function Cuestionarios() {
     const interpretation = getEATInterpretation(score);
 
     return (
-      <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+      <div className="min-h-screen bg-background-subpage p-4 pb-20">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-6 pt-4">
             <Button variant="ghost" size="sm" onClick={resetQuestionario}>
@@ -877,7 +877,7 @@ export default function Cuestionarios() {
     const progress = ((currentQuestion + 1) / questions.length) * 100;
 
     return (
-      <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+      <div className="min-h-screen bg-background-subpage p-4 pb-20">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-6 pt-4">
             <Button variant="ghost" size="sm" onClick={resetQuestionario}>
@@ -947,7 +947,7 @@ export default function Cuestionarios() {
 
   // Vista principal de cuestionarios
   return (
-    <div className="min-h-screen bg-gradient-calm p-4 pb-20">
+    <div className="min-h-screen bg-background-subpage p-4 pb-20">
       <div className="max-w-md mx-auto">
         <div className="flex items-center justify-between mb-6 pt-4">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
