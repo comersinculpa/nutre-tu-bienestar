@@ -3,7 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Heart, ChefHat, Clock, Users, CheckCircle, Star } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Heart, ChefHat, Clock, Users, CheckCircle, Star, BookOpen } from 'lucide-react';
+import { BlogRecetas } from './BlogRecetas';
 
 const cursosGuiados = [
   {
@@ -352,6 +354,20 @@ export function CocinaTerapeutica() {
         </p>
       </div>
 
+      <Tabs defaultValue="curso" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="curso" className="flex items-center gap-2">
+            <ChefHat className="w-4 h-4" />
+            Curso & Recetas
+          </TabsTrigger>
+          <TabsTrigger value="blog" className="flex items-center gap-2">
+            <BookOpen className="w-4 h-4" />
+            Blog Comunitario
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="curso" className="space-y-8">
+
       {/* Progreso general */}
       <Card className="bg-primary/5 border-primary/20">
         <CardContent className="p-6">
@@ -443,6 +459,12 @@ export function CocinaTerapeutica() {
           </p>
         </CardContent>
       </Card>
+        </TabsContent>
+
+        <TabsContent value="blog">
+          <BlogRecetas />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
