@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import NewIndex from "./pages/NewIndex";
+import MainMenu from "./pages/MainMenu";
 import NewDiario from "./pages/NewDiario";
 import NewCrisis from "./pages/NewCrisis";
 import Onboarding from "./pages/Onboarding";
@@ -20,6 +20,7 @@ import Comunidad from "./pages/Comunidad";
 import Pausa from "./pages/Pausa";
 import DetectorHambre from "./pages/DetectorHambre";
 import TCAModule from "./pages/TCAModule";
+import JuegosPage from "./pages/JuegosPage";
 import NotFound from "./pages/NotFound";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { CrisisButton } from "./components/CrisisButton";
@@ -36,7 +37,7 @@ const App = () => (
         <div className="min-h-screen bg-background">
           <CrisisButton />
           <Routes>
-            <Route path="/" element={<NewIndex />} />
+            <Route path="/" element={<MainMenu />} />
             <Route path="/diario-emocional" element={<NewDiario />} />
             <Route path="/apoyo" element={<TherapistChat />} />
             <Route path="/comunidad" element={<Comunidad />} />
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/pausa" element={<Pausa />} />
             <Route path="/detector-hambre" element={<DetectorHambre />} />
             <Route path="/tca-module" element={<TCAModule />} />
+            <Route path="/juegos" element={<JuegosPage />} />
             {/* Legacy routes for backward compatibility */}
             <Route path="/diario" element={<DiarioEmocional />} />
             <Route path="/detector" element={<DetectorHambre />} />
