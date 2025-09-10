@@ -38,6 +38,12 @@ import mindfulEating from '@/assets/mindful-eating.jpg';
 import communitySupport from '@/assets/community-support.jpg';
 import vibrantNutrition from '@/assets/vibrant-nutrition.jpg';
 import progressTracking from '@/assets/progress-tracking.jpg';
+import avatarCompanion from '@/assets/avatar-companion.jpg';
+import crisisSupportWarm from '@/assets/crisis-support-warm.jpg';
+import audioColorful from '@/assets/audio-colorful.jpg';
+import breathingColorful from '@/assets/breathing-colorful.jpg';
+import interactiveGames from '@/assets/interactive-games.jpg';
+import mentalHealthSupport from '@/assets/mental-health-support.jpg';
 
 interface MenuOption {
   id: string;
@@ -65,7 +71,7 @@ const menuOptions: MenuOption[] = [
     category: 'featured',
     color: 'from-orange-400 to-orange-500',
     gradient: 'bg-gradient-to-br from-orange-400 to-orange-500',
-    image: communitySupport,
+    image: avatarCompanion,
     badge: '24/7',
     featured: true,
     interactive: true
@@ -79,6 +85,7 @@ const menuOptions: MenuOption[] = [
     category: 'featured',
     color: 'from-peach-300 to-peach-400',
     gradient: 'bg-gradient-to-br from-peach-300 to-peach-400',
+    image: mentalHealthSupport,
     badge: 'Esencial',
     featured: true
   },
@@ -105,7 +112,7 @@ const menuOptions: MenuOption[] = [
     category: 'principal',
     color: 'from-coral-300 to-coral-400',
     gradient: 'bg-gradient-to-br from-coral-300 to-coral-400',
-    image: communitySupport,
+    image: crisisSupportWarm,
     badge: 'Urgente',
     interactive: true
   },
@@ -118,7 +125,7 @@ const menuOptions: MenuOption[] = [
     category: 'principal',
     color: 'from-honey-300 to-honey-400',
     gradient: 'bg-gradient-to-br from-honey-300 to-honey-400',
-    image: mindfulEating,
+    image: audioColorful,
     interactive: true
   },
 
@@ -132,7 +139,7 @@ const menuOptions: MenuOption[] = [
     category: 'bienestar',
     color: 'from-cream-300 to-cream-400',
     gradient: 'bg-gradient-to-br from-cream-300 to-cream-400',
-    image: mindfulEating,
+    image: breathingColorful,
     interactive: true
   },
   {
@@ -153,7 +160,8 @@ const menuOptions: MenuOption[] = [
     path: '/check-in',
     category: 'bienestar',
     color: 'from-peach-300 to-peach-400',
-    gradient: 'bg-gradient-to-br from-peach-300 to-peach-400'
+    gradient: 'bg-gradient-to-br from-peach-300 to-peach-400',
+    image: mindfulEating
   },
 
   // Community with warm food colors
@@ -187,7 +195,7 @@ const menuOptions: MenuOption[] = [
     category: 'comunidad',
     color: 'from-orange-300 to-orange-400',
     gradient: 'bg-gradient-to-br from-orange-300 to-orange-400',
-    image: mindfulEating,
+    image: interactiveGames,
     interactive: true
   },
 
