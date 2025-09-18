@@ -1,27 +1,29 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Shield, Heart } from 'lucide-react';
 
 export function CrisisButton() {
   const navigate = useNavigate();
 
   const handleCrisisClick = () => {
     navigate('/crisis');
-    // Vibración de emergencia
+    // Emergency vibration pattern
     if ('vibrate' in navigator) {
-      navigator.vibrate([200, 100, 200]);
+      navigator.vibrate([200, 100, 200, 100, 200]);
     }
   };
 
   return (
     <button
       onClick={handleCrisisClick}
-      className="fixed top-4 right-4 z-50 w-20 h-20 rounded-2xl bg-gradient-to-br from-crisis to-crisis/90 hover:from-crisis hover:to-crisis/80 text-crisis-foreground font-bold text-sm shadow-2xl hover:shadow-crisis/50 transition-all duration-300 transform hover:scale-105 animate-pulse border-2 border-crisis/20"
-      aria-label="Ayuda de Crisis - 024 y 112"
-      title="Ayuda inmediata - 024 (Salud Mental) / 112 (Emergencias)"
+      className="fixed top-4 right-4 z-50 w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xs shadow-2xl hover:shadow-red-500/50 transition-all duration-300 transform hover:scale-105 border-2 border-red-400/20"
+      aria-label="Ayuda de Crisis - 024 (Salud Mental) y 112 (Emergencias)"
+      title="Ayuda inmediata disponible"
     >
       <div className="flex flex-col items-center justify-center">
-        <span className="text-xs font-bold">CRISIS</span>
-        <span className="text-[10px] opacity-90">024•112</span>
+        <Shield className="w-5 h-5 mb-0.5" />
+        <span className="text-[10px] font-bold">CRISIS</span>
+        <span className="text-[8px] opacity-90">024•112</span>
       </div>
     </button>
   );

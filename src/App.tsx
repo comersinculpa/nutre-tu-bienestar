@@ -16,6 +16,7 @@ import PausaConsciente from "./pages/PausaConsciente";
 import ComerConCuidado from "./pages/ComerConCuidado";
 import Laboratorio from "./pages/Laboratorio";
 import IACompanion from "./components/IACompanion";
+import Registrar from "./pages/Registrar";
 import Progreso from "./pages/Progreso";
 import Perfil from "./pages/Perfil";
 import Cuestionarios from "./pages/Cuestionarios";
@@ -29,6 +30,7 @@ import JuegosPage from "./pages/JuegosPage";
 import NotFound from "./pages/NotFound";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { CrisisButton } from "./components/CrisisButton";
+import { PersistentFAB } from "./components/PersistentFAB";
 import TherapistChat from "./components/TherapistChat";
 
 const queryClient = new QueryClient();
@@ -41,8 +43,10 @@ const App = () => (
       <BrowserRouter>
         <div className="min-h-screen bg-background">
           <CrisisButton />
+          <PersistentFAB />
           <Routes>
             <Route path="/" element={<MainMenu />} />
+            <Route path="/registrar" element={<Registrar />} />
             <Route path="/diario-emocional" element={<NewDiario />} />
             <Route path="/apoyo" element={<TherapistChat />} />
             <Route path="/comunidad" element={<Comunidad />} />

@@ -158,18 +158,18 @@ export default function CheckInDiario() {
             </div>
           </div>
           
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            Check-in Diario
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            ¿Cómo te acompaño ahora?
           </h1>
-          <p className="text-muted-foreground text-sm">
-            3 pasos rápidos para conectar contigo • 60-90 segundos
+          <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+            Un lugar para comer sin culpa y cuidarte con cariño
           </p>
         </div>
 
         <div className="max-w-2xl mx-auto space-y-6">
           {/* Avatar */}
           <Avatar 
-            message="Vamos paso a paso. No hay prisa, solo conexión contigo."
+            message="Tomemos un minuto para mirarte con cariño. No hay forma correcta de sentirse."
             mood="supportive"
           />
 

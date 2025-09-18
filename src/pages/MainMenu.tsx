@@ -267,14 +267,20 @@ export default function MainMenu() {
           <div className="max-w-3xl mx-auto">
             <div className="flex justify-center items-center gap-4 mb-6">
               <div className="w-8 h-8 bg-ochre-500 rounded-full animate-pulse"></div>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
-                <span className="bg-gradient-brand bg-clip-text text-transparent">Comer sin culpa</span>
-              </h2>
+              <h1 className="text-3xl font-bold text-foreground mb-2">
+                ¿Cómo te acompaño ahora?
+              </h1>
+              <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+                Un lugar para comer sin culpa y cuidarte con cariño
+              </p>
               <div className="w-8 h-8 bg-green-500 rounded-full animate-bounce"></div>
             </div>
-            <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-              Tu espacio seguro para cultivar una relación saludable con la comida y las emociones
-            </p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            ¿Cómo te acompaño ahora?
+          </h1>
+          <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+            Tu espacio seguro para cultivar una relación saludable con la comida y las emociones
+          </p>
             
             {/* Two main CTAs */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center max-w-2xl mx-auto">
@@ -299,20 +305,20 @@ export default function MainMenu() {
                 </div>
               </Button>
               
-              <Button 
-                onClick={() => handleNavigation('/check-in-diario')}
-                className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-12 py-6 text-xl font-semibold rounded-2xl shadow-elegant hover:shadow-glow transition-all duration-500 transform hover:scale-110 hover:rotate-1"
-              >
-                <div className="flex items-center justify-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-125 transition-transform duration-300">
-                    <Heart className="h-6 w-6" />
+                <Button 
+                  onClick={() => handleNavigation('/registrar')}
+                  className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-12 py-6 text-xl font-semibold rounded-2xl shadow-elegant hover:shadow-glow transition-all duration-500 transform hover:scale-110 hover:rotate-1"
+                >
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-125 transition-transform duration-300">
+                      <Heart className="h-6 w-6" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xl font-bold">Registrar cómo me siento</div>
+                      <div className="text-sm opacity-90">Check-in • 60-90 segundos</div>
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <div className="text-xl font-bold">Registrar cómo me siento</div>
-                    <div className="text-sm opacity-90">Check-in • 60-90 segundos</div>
-                  </div>
-                </div>
-              </Button>
+                </Button>
             </div>
           </div>
         </div>
@@ -377,8 +383,7 @@ export default function MainMenu() {
               Tu bienestar, a tu ritmo
             </p>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              No importa si estás en casa preparando la cena, en la oficina entre reuniones, o cuidando de los peques. 
-              Cada momento que dedicas a ti misma es válido y valioso. No hay una forma "correcta" de cuidarse.
+              Pequeños actos, grandes cambios. No se trata de controlar, sino de escucharte.
             </p>
           </div>
         </div>
