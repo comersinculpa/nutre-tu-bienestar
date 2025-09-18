@@ -16,7 +16,7 @@ export function CrisisButton() {
   return (
     <button
       onClick={handleCrisisClick}
-      className="fixed top-4 left-4 z-50 w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xs shadow-2xl hover:shadow-red-500/50 transition-all duration-300 transform hover:scale-105 border-2 border-red-400/20"
+      className="fixed top-4 right-4 z-50 w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xs shadow-2xl hover:shadow-red-500/50 transition-all duration-300 transform hover:scale-105 border-2 border-red-400/20"
       aria-label="Ayuda de Crisis - 024 (Salud Mental) y 112 (Emergencias)"
       title="Ayuda inmediata disponible"
     >

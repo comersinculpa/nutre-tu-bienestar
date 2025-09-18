@@ -249,7 +249,9 @@ export default function MainMenu() {
               </h1>
               <p className="text-muted-foreground mt-1">¿Cómo te quieres cuidar hoy?</p>
             </div>
-            <UserProfile />
+            <div className="mr-16">
+              <UserProfile />
+            </div>
           </div>
         </div>
       </div>
