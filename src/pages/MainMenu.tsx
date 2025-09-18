@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { UserProfile } from '@/components/UserProfile';
+import { TodayProgress } from '@/components/TodayProgress';
 import { 
   Heart, 
   Headphones, 
@@ -29,7 +30,7 @@ import {
   Play,
   ChevronRight,
   Zap,
-  Sun
+  Timer
 } from 'lucide-react';
 
 // Import food/nutrition images
@@ -175,7 +176,6 @@ const menuOptions: MenuOption[] = [
 export default function MainMenu() {
   const navigate = useNavigate();
   const [greeting, setGreeting] = useState('');
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -213,223 +213,155 @@ export default function MainMenu() {
       {/* Interactive Background Elements */}
       <div className="fixed inset-0 pointer-events-none">
         <div 
-          className="absolute w-96 h-96 bg-gradient-to-br from-orange-300/20 to-peach-300/20 rounded-full blur-3xl transition-transform duration-1000 ease-out"
+          className="absolute w-96 h-96 bg-gradient-to-br from-ochre-300/10 to-ochre-400/10 rounded-full blur-3xl transition-transform duration-1000 ease-out"
           style={{
             transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`
           }}
         ></div>
         <div 
-          className="absolute top-1/3 right-0 w-80 h-80 bg-gradient-to-br from-coral-300/20 to-honey-300/20 rounded-full blur-3xl transition-transform duration-700 ease-out"
+          className="absolute top-1/3 right-0 w-80 h-80 bg-gradient-to-br from-green-300/10 to-green-400/10 rounded-full blur-3xl transition-transform duration-700 ease-out"
           style={{
             transform: `translate(${mousePosition.x * -0.01}px, ${mousePosition.y * -0.01}px)`
           }}
         ></div>
         <div 
-          className="absolute bottom-0 left-1/4 w-64 h-64 bg-gradient-to-br from-cream-300/20 to-orange-300/20 rounded-full blur-3xl transition-transform duration-500 ease-out"
+          className="absolute bottom-0 left-1/4 w-64 h-64 bg-gradient-to-br from-yellow-300/10 to-yellow-400/10 rounded-full blur-3xl transition-transform duration-500 ease-out"
           style={{
             transform: `translate(${mousePosition.x * 0.015}px, ${mousePosition.y * 0.015}px)`
           }}
         ></div>
       </div>
 
-      {/* Modern Header with Warm Food Accent */}
+      {/* Modern Header with Warm Earth Tones */}
       <div className="relative overflow-hidden bg-background-subpage/90 backdrop-blur-md border-b border-border">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-400/5 via-peach-300/5 to-coral-300/5"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-ochre-400/5 via-green-300/5 to-yellow-300/5"></div>
         <div className="container mx-auto px-4 py-6 relative">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                <div className="w-2 h-2 bg-peach-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
-                <div className="w-2 h-2 bg-coral-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                <div className="w-2 h-2 bg-ochre-400 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
               </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 via-peach-600 to-coral-600 bg-clip-text text-transparent">
-                {greeting} 🍎
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-ochre-600 via-green-600 to-yellow-600 bg-clip-text text-transparent">
+                {greeting} 🌱
               </h1>
-              <p className="text-muted-foreground mt-1">¿En qué te puedo acompañar hoy?</p>
+              <p className="text-muted-foreground mt-1">¿Cómo te quieres cuidar hoy?</p>
             </div>
             <UserProfile />
           </div>
         </div>
       </div>
 
-        {/* Hero Section marca comersinculpa */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0">
-            <img 
-              src={heroWellbeing} 
-              alt="Bienestar y alimentación consciente" 
-              className="w-full h-full object-cover opacity-25"
-            />
-            <div className="absolute inset-0 bg-gradient-brand/10"></div>
-          </div>
-          <div className="relative container mx-auto px-4 py-16 text-center">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex justify-center items-center gap-4 mb-6">
-                <div className="w-8 h-8 bg-ochre-500 rounded-full animate-pulse"></div>
-                <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
-                  <span className="bg-gradient-brand bg-clip-text text-transparent">Comer sin culpa</span>
-                </h2>
-                <div className="w-8 h-8 bg-green-500 rounded-full animate-bounce"></div>
-              </div>
-              <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                Tu compañero digital para una relación saludable con la comida y las emociones
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  onClick={() => handleNavigation('/check-in-diario')}
-                  className="bg-gradient-brand hover:opacity-90 text-white px-8 py-3 text-lg rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105"
-                >
-                  <CheckCircle className="mr-2 h-5 w-5" />
-                  Comenzar Check-in
-                </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => handleNavigation('/comer-con-cuidado')}
-                  className="border-2 border-ochre-300 hover:border-ochre-400 text-ochre-700 px-8 py-3 text-lg rounded-xl hover:bg-ochre-50 transition-all duration-300 transform hover:scale-105"
-                >
-                  <Heart className="mr-2 h-5 w-5" />
-                  Registrar momento
-                </Button>
-              </div>
+      {/* Hero Section marca comersinculpa */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={heroWellbeing} 
+            alt="Bienestar y alimentación consciente" 
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-brand/5"></div>
+        </div>
+        <div className="relative container mx-auto px-4 py-16 text-center">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex justify-center items-center gap-4 mb-6">
+              <div className="w-8 h-8 bg-ochre-500 rounded-full animate-pulse"></div>
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+                <span className="bg-gradient-brand bg-clip-text text-transparent">Comer sin culpa</span>
+              </h2>
+              <div className="w-8 h-8 bg-green-500 rounded-full animate-bounce"></div>
+            </div>
+            <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+              Tu espacio seguro para cultivar una relación saludable con la comida y las emociones
+            </p>
+            
+            {/* Two main CTAs */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center max-w-2xl mx-auto">
+              <Button 
+                onClick={() => {
+                  handleNavigation('/pausa-consciente');
+                  // Vibración leve al iniciar pausa
+                  if ('vibrate' in navigator) {
+                    navigator.vibrate([100, 50, 100]);
+                  }
+                }}
+                className="group bg-gradient-to-r from-ochre-500 to-ochre-600 hover:from-ochre-600 hover:to-ochre-700 text-white px-12 py-6 text-xl font-semibold rounded-2xl shadow-elegant hover:shadow-glow transition-all duration-500 transform hover:scale-110 hover:-rotate-1"
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-125 transition-transform duration-300">
+                    <Pause className="h-6 w-6" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-xl font-bold">Hacer una pausa ahora</div>
+                    <div className="text-sm opacity-90">Respiración • 2-3 minutos</div>
+                  </div>
+                </div>
+              </Button>
+              
+              <Button 
+                onClick={() => handleNavigation('/check-in-diario')}
+                className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-12 py-6 text-xl font-semibold rounded-2xl shadow-elegant hover:shadow-glow transition-all duration-500 transform hover:scale-110 hover:rotate-1"
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-125 transition-transform duration-300">
+                    <Heart className="h-6 w-6" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-xl font-bold">Registrar cómo me siento</div>
+                    <div className="text-sm opacity-90">Check-in • 60-90 segundos</div>
+                  </div>
+                </div>
+              </Button>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="container mx-auto px-4 py-12 space-y-16 relative z-10">
-          {/* Core Loop - Herramientas principales */}
-          <section>
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-brand/10 px-4 py-2 rounded-full mb-4">
-                <Heart className="h-5 w-5 text-ochre-600" />
-                <span className="text-ochre-700 font-semibold">Core Loop Diario</span>
-              </div>
-              <h3 className="text-2xl font-bold text-foreground">Tu rutina de bienestar</h3>
-              <p className="text-muted-foreground mt-2">
-                Check-in → Pausar → Registrar → Logros (1-5 minutos al día)
-              </p>
-            </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {featuredOptions.map((option) => {
-              const Icon = option.icon;
-              const isHovered = hoveredCard === option.id;
-              
-              return (
-                <Card 
-                  key={option.id}
-                  className="group relative cursor-pointer overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-700 transform hover:scale-105 hover:rotate-1"
-                  onClick={() => handleNavigation(option.path)}
-                  onMouseEnter={() => setHoveredCard(option.id)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                >
-                  <div className={`absolute inset-0 ${option.gradient} opacity-90`}></div>
-                  {option.image && (
-                    <div className="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity duration-500">
-                      <img 
-                        src={option.image} 
-                        alt={option.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  {option.interactive && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  )}
-                  <div className="relative z-10 p-8 text-white">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center group-hover:scale-125 group-hover:rotate-12 transition-transform duration-500">
-                        <Icon className="w-8 h-8" />
-                      </div>
-                      {option.badge && (
-                        <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/30 animate-pulse">
-                          {option.badge}
-                        </Badge>
-                      )}
-                    </div>
-                    <h4 className="text-2xl font-bold mb-3">{option.title}</h4>
-                    <p className="text-white/90 leading-relaxed mb-6">{option.description}</p>
-                    <div className="flex items-center gap-2 text-white/80 group-hover:text-white transition-colors">
-                      <span className="font-medium">Comenzar</span>
-                      <ArrowRight className={`h-4 w-4 transition-transform duration-500 ${isHovered ? 'translate-x-2 scale-125' : ''}`} />
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
+      <div className="container mx-auto px-4 py-12 space-y-12 relative z-10">
+        {/* Today's Progress */}
+        <TodayProgress className="max-w-2xl mx-auto" />
+        
+        {/* Quick access to more tools */}
+        <section>
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-foreground mb-2">Otras herramientas de apoyo</h3>
+            <p className="text-muted-foreground">
+              Cuando necesites acompañamiento adicional o quieras explorar
+            </p>
           </div>
-        </section>
 
-          {/* Herramientas de apoyo */}
-          <section>
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-green/10 px-4 py-2 rounded-full mb-4">
-                <Users className="h-5 w-5 text-green-600" />
-                <span className="text-green-700 font-semibold">Apoyo y Recursos</span>
-              </div>
-              <h3 className="text-2xl font-bold bg-gradient-brand bg-clip-text text-transparent mb-2">
-                Herramientas de soporte
-              </h3>
-              <p className="text-muted-foreground">Acompañamiento cuando necesites apoyo adicional</p>
-            </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {regularOptions.map((option, index) => {
+          {/* Simplified grid of support tools */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            {[...featuredOptions.slice(2), ...regularOptions.slice(0, 3)].map((option) => {
               const Icon = option.icon;
-              const isHovered = hoveredCard === option.id;
               
               return (
                 <Card 
                   key={option.id}
-                  className="group cursor-pointer hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:rotate-2 border-0 shadow-md overflow-hidden bg-white/80 backdrop-blur-sm"
+                  className="group cursor-pointer hover:shadow-elegant transition-all duration-300 transform hover:scale-105 border-0 bg-white/60 backdrop-blur-sm hover:bg-white/80"
                   onClick={() => handleNavigation(option.path)}
-                  onMouseEnter={() => setHoveredCard(option.id)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                  style={{
-                    animationDelay: `${index * 100}ms`
-                  }}
                 >
-                  {option.image && (
-                    <div className="h-32 overflow-hidden relative">
-                      <img 
-                        src={option.image} 
-                        alt={option.title}
-                        className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-700"
-                      />
-                      {option.interactive && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      )}
-                    </div>
-                  )}
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`w-12 h-12 rounded-xl ${option.gradient} flex items-center justify-center shadow-lg group-hover:scale-125 group-hover:rotate-45 transition-transform duration-500`}>
-                        <Icon className="w-6 h-6 text-white" />
+                  <CardContent className="p-5">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`w-10 h-10 rounded-xl ${option.gradient} flex items-center justify-center shadow-soft`}>
+                        <Icon className="w-5 h-5 text-white" />
                       </div>
                       {option.badge && (
                         <Badge 
-                          variant={option.badge === 'Urgente' ? 'destructive' : 'secondary'}
-                          className="text-xs animate-bounce"
+                          variant="secondary"
+                          className="text-xs bg-ochre-50 text-ochre-700 border-ochre-200"
                         >
                           {option.badge}
                         </Badge>
                       )}
                     </div>
-                    <h4 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-green-600 group-hover:to-blue-600 group-hover:bg-clip-text transition-all duration-300">
+                    <h4 className="font-semibold text-foreground mb-1 text-sm">
                       {option.title}
                     </h4>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                    <p className="text-muted-foreground text-xs leading-relaxed">
                       {option.description}
                     </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium bg-gradient-to-r from-green-500 to-blue-500 bg-clip-text text-transparent">
-                        {option.category === 'principal' && 'Herramienta Principal'}
-                        {option.category === 'bienestar' && 'Bienestar'}
-                        {option.category === 'comunidad' && 'Comunidad'}
-                        {option.category === 'seguimiento' && 'Seguimiento'}
-                      </span>
-                      <ChevronRight className={`h-4 w-4 text-gray-400 group-hover:text-green-600 transition-all duration-500 ${isHovered ? 'translate-x-2 scale-125' : ''}`} />
-                    </div>
                   </CardContent>
                 </Card>
               );
@@ -437,45 +369,19 @@ export default function MainMenu() {
           </div>
         </section>
 
-        {/* Rainbow Call to Action */}
-        <section className="text-center">
-          <Card className="max-w-4xl mx-auto bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 border-green-200 overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-green-400/10 via-blue-400/10 to-purple-400/10"></div>
-            <CardContent className="p-12 relative z-10">
-              <div className="flex flex-col md:flex-row items-center gap-8">
-                <div className="flex-1 text-left">
-                  <h3 className="text-3xl font-bold text-gray-800 mb-4">
-                    ¿Primera vez aquí?
-                  </h3>
-                  <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                    Te recomendamos empezar hablando con tu Acompañante IA. Está entrenado específicamente 
-                    para ayudarte a encontrar la calma y navegar por todas las herramientas según tus necesidades del momento.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Button 
-                      onClick={() => handleNavigation('/apoyo')}
-                      className="bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 hover:from-green-500 hover:via-blue-500 hover:to-purple-500 text-white px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-300"
-                    >
-                      <MessageSquare className="mr-2 h-5 w-5" />
-                      Empezar conversación
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      onClick={() => handleNavigation('/recursos')}
-                      className="border-green-200 text-green-700 hover:bg-green-50 px-6 py-3 rounded-xl transform hover:scale-105 transition-all duration-300"
-                    >
-                      <Play className="mr-2 h-4 w-4" />
-                      Ver recursos zen
-                    </Button>
-                  </div>
-                </div>
-                <div className="w-32 h-32 bg-gradient-to-br from-green-400 via-blue-400 to-purple-400 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
-                  <Heart className="w-16 h-16 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+        {/* Inclusive message */}
+        <div className="text-center max-w-2xl mx-auto">
+          <div className="p-6 bg-gradient-to-r from-ochre-50 via-green-50 to-ochre-50 rounded-2xl border border-ochre-100">
+            <Heart className="h-8 w-8 text-ochre-600 mx-auto mb-3" />
+            <p className="text-foreground font-medium mb-2">
+              Tu bienestar, a tu ritmo
+            </p>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              No importa si estás en casa preparando la cena, en la oficina entre reuniones, o cuidando de los peques. 
+              Cada momento que dedicas a ti misma es válido y valioso. No hay una forma "correcta" de cuidarse.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

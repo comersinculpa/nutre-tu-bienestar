@@ -139,6 +139,11 @@ export default function PausaConsciente() {
   const handlePauseCompleted = () => {
     if (!selectedTechnique) return;
     
+    // Vibración leve al completar respiración
+    if ('vibrate' in navigator) {
+      navigator.vibrate([200, 100, 200, 100, 200]);
+    }
+    
     // Save completed pause
     const pauseData = {
       id: Date.now().toString(),
@@ -157,8 +162,8 @@ export default function PausaConsciente() {
     updateStats('meditation', pauseData);
     addPoints(15, `Pausa consciente completada: ${selectedTechnique.title}`);
 
-    toast.success("¡Pausa completada!", {
-      description: `+15 puntos por completar ${selectedTechnique.title}`
+    toast.success("¡Respiración completada!", {
+      description: "Tu cuerpo y mente te lo agradecen 💚"
     });
   };
 
