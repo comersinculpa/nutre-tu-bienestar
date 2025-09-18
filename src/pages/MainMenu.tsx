@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { UserProfile } from '@/components/UserProfile';
 import { TodayProgress } from '@/components/TodayProgress';
+import { TimeBasedSuggestions } from '@/components/TimeBasedSuggestions';
 import { 
   Heart, 
   Headphones, 
@@ -324,12 +325,15 @@ export default function MainMenu() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12 space-y-12 relative z-10">
-        {/* Today's Progress */}
-        <TodayProgress className="max-w-2xl mx-auto" />
-        
-        {/* Quick access to more tools */}
-        <section>
+        <div className="container mx-auto px-4 py-12 space-y-12 relative z-10">
+          {/* Today's Progress */}
+          <TodayProgress className="max-w-2xl mx-auto" />
+          
+          {/* Time-based suggestions */}
+          <TimeBasedSuggestions />
+          
+          {/* Quick access to more tools */}
+          <section>
           <div className="text-center mb-8">
             <h3 className="text-2xl font-bold text-foreground mb-2">Otras herramientas de apoyo</h3>
             <p className="text-muted-foreground">

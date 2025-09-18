@@ -16,7 +16,9 @@ import PausaConsciente from "./pages/PausaConsciente";
 import ComerConCuidado from "./pages/ComerConCuidado";
 import Laboratorio from "./pages/Laboratorio";
 import IACompanion from "./components/IACompanion";
+import CrisisSupport from "./pages/CrisisSupport";
 import Registrar from "./pages/Registrar";
+import MiProgreso from "./pages/MiProgreso";
 import Progreso from "./pages/Progreso";
 import Perfil from "./pages/Perfil";
 import Cuestionarios from "./pages/Cuestionarios";
@@ -51,7 +53,7 @@ const App = () => (
             <Route path="/apoyo" element={<TherapistChat />} />
             <Route path="/comunidad" element={<Comunidad />} />
             <Route path="/recursos" element={<Recursos />} />
-            <Route path="/crisis" element={<NewCrisis />} />
+            <Route path="/crisis" element={<CrisisSupport />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/registro-alimentario" element={<RegistroAlimentario />} />
@@ -61,7 +63,7 @@ const App = () => (
             <Route path="/comer-con-cuidado" element={<ComerConCuidado />} />
             <Route path="/laboratorio" element={<Laboratorio />} />
             <Route path="/ia-companion" element={<IACompanion />} />
-            <Route path="/progreso" element={<Progreso />} />
+            <Route path="/progreso" element={<MiProgreso />} />
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/cuestionarios" element={<Cuestionarios />} />
             <Route path="/talleres" element={<Talleres />} />
