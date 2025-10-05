@@ -159,16 +159,6 @@ export default function Registrar() {
             </CardContent>
           </Card>
           
-          {/* Alternative action */}
-          <div className="text-center">
-            <Button
-              variant="outline"
-              onClick={() => navigate('/')}
-              className="text-muted-foreground hover:text-foreground border-muted hover:border-ochre-300"
-            >
-              No hoy
-            </Button>
-          </div>
         </div>
       </div>
     </div>
