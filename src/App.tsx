@@ -31,6 +31,7 @@ import Pausa from "./pages/Pausa";
 import DetectorHambre from "./pages/DetectorHambre";
 import TCAModule from "./pages/TCAModule";
 import JuegosPage from "./pages/JuegosPage";
+import Suscripcion from "./pages/Suscripcion";
 import NotFound from "./pages/NotFound";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { CrisisButton } from "./components/CrisisButton";
@@ -75,6 +76,7 @@ const App = () => (
               <Route path="/detector-hambre" element={<DetectorHambre />} />
               <Route path="/tca-module" element={<TCAModule />} />
               <Route path="/juegos" element={<JuegosPage />} />
+              <Route path="/suscripcion" element={<Suscripcion />} />
               {/* Legacy routes for backward compatibility */}
               <Route path="/diario" element={<DiarioEmocional />} />
               <Route path="/detector" element={<DetectorHambre />} />

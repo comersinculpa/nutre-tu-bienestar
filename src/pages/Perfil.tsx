@@ -18,14 +18,18 @@ import {
   Calendar,
   Target,
   Save,
-  Loader2
+  Loader2,
+  Crown,
+  ChevronRight
 } from 'lucide-react';
+import { useSubscription } from '@/hooks/useSubscription';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function Perfil() {
   const navigate = useNavigate();
   const { user, profile, updateProfile, loading } = useAuth();
+  const { subscription, getTierInfo } = useSubscription();
   const { toast } = useToast();
   
   const [nombre, setNombre] = useState('');
@@ -225,6 +229,35 @@ export default function Perfil() {
                   </div>
                 );
               })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Subscription */}
+        <Card 
+          className="bg-gradient-card shadow-card border-0 cursor-pointer hover:shadow-lg transition-shadow"
+          onClick={() => navigate('/suscripcion')}
+        >
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Crown className="w-5 h-5 text-accent" />
+              Mi Suscripción
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-semibold text-foreground">
+                  Plan {subscription ? getTierInfo(subscription.tier).name : 'Gratuito'}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {subscription?.tier === 'FREE' 
+                    ? 'Mejora tu plan para más funciones'
+                    : `${subscription?.features.recipes_remaining === -1 ? '∞' : subscription?.features.recipes_remaining} recetas restantes`
+                  }
+                </p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </div>
           </CardContent>
         </Card>

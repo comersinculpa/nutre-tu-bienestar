@@ -1,1 +1,28 @@
 project_id = "zxtcvswfblrzeyclwvfi"
+
+[functions.chatbot-csc]
+verify_jwt = false
+
+[functions.generate-breathing-audio]
+verify_jwt = false
+
+[functions.generate-hypnosis-audio]
+verify_jwt = false
+
+[functions.generate-meditation-audio]
+verify_jwt = false
+
+[functions.generate-mindful-audio]
+verify_jwt = false
+
+[functions.subscription-status]
+verify_jwt = false
+
+[functions.check-feature]
+verify_jwt = false
+
+[functions.increment-usage]
+verify_jwt = false
+
+[functions.revenuecat-webhook]
+verify_jwt = false
