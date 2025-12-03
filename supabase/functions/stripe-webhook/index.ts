@@ -6,6 +6,55 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, stripe-signature',
 };
 
+// Verificar firma del webhook de Stripe
+async function verifyStripeSignature(payload: string, signature: string, secret: string): Promise<boolean> {
+  try {
+    const encoder = new TextEncoder();
+    const parts = signature.split(',');
+    const timestamp = parts.find(p => p.startsWith('t='))?.split('=')[1];
+    const v1Signature = parts.find(p => p.startsWith('v1='))?.split('=')[1];
+
+    if (!timestamp || !v1Signature) {
+      console.error('Firma de Stripe incompleta');
+      return false;
+    }
+
+    const signedPayload = `${timestamp}.${payload}`;
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    
+    const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(signedPayload));
+    const computedSignature = Array.from(new Uint8Array(signatureBuffer))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    return computedSignature === v1Signature;
+  } catch (error) {
+    console.error('Error verificando firma:', error);
+    return false;
+  }
+}
+
+// Mapear price IDs a tiers
+const getTierFromPrice = (priceId: string): 'FREE' | 'BASIC' | 'PREMIUM' => {
+  const basicPriceId = Deno.env.get('STRIPE_PRICE_BASIC') || 'price_basic_monthly';
+  const premiumPriceId = Deno.env.get('STRIPE_PRICE_PREMIUM') || 'price_premium_monthly';
+  
+  if (priceId === basicPriceId) return 'BASIC';
+  if (priceId === premiumPriceId) return 'PREMIUM';
+  
+  // Fallback para IDs conocidos
+  if (priceId.toLowerCase().includes('basic')) return 'BASIC';
+  if (priceId.toLowerCase().includes('premium')) return 'PREMIUM';
+  
+  return 'FREE';
+};
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -15,63 +64,67 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET');
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const body = await req.text();
+    const signature = req.headers.get('stripe-signature');
+
+    // Verificar firma si el secret está configurado
+    if (webhookSecret && signature) {
+      const isValid = await verifyStripeSignature(body, signature, webhookSecret);
+      if (!isValid) {
+        console.error('Firma de webhook inválida');
+        return new Response(
+          JSON.stringify({ error: 'Firma inválida' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      console.log('Firma de Stripe verificada correctamente');
+    } else {
+      console.warn('STRIPE_WEBHOOK_SECRET no configurado o falta firma, omitiendo verificación');
+    }
+
     const event = JSON.parse(body);
+    console.log('Stripe webhook recibido:', event.type);
 
-    console.log('Stripe webhook received:', event.type);
-
-    // Map Stripe product/price IDs to tiers
-    const getTierFromPrice = (priceId: string): 'FREE' | 'BASIC' | 'PREMIUM' => {
-      // These should be configured with actual Stripe price IDs
-      const priceMapping: Record<string, 'BASIC' | 'PREMIUM'> = {
-        'price_basic_monthly': 'BASIC',
-        'price_basic_yearly': 'BASIC',
-        'price_premium_monthly': 'PREMIUM',
-        'price_premium_yearly': 'PREMIUM',
-      };
-      return priceMapping[priceId] || 'FREE';
-    };
-
-    // Extract user email from Stripe customer
-    const getCustomerEmail = async (customerId: string): Promise<string | null> => {
-      // In production, you would fetch the customer from Stripe API
-      // For now, we expect the email in metadata
-      return null;
+    // Función auxiliar para obtener user_id de metadata
+    const getUserIdFromMetadata = (metadata: any): string | null => {
+      return metadata?.user_id || null;
     };
 
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
-        const customerEmail = session.customer_email || session.customer_details?.email;
-        const priceId = session.metadata?.price_id;
-        
-        if (customerEmail) {
-          // Find user by email
-          const { data: userData } = await supabase.auth.admin.listUsers();
-          const user = userData?.users?.find(u => u.email === customerEmail);
-          
-          if (user) {
-            const tier = getTierFromPrice(priceId);
-            const { error } = await supabase
-              .from('subscriptions')
-              .update({
-                tier,
-                status: 'active',
-                subscription_source: 'web',
-                subscription_start_date: new Date().toISOString(),
-                subscription_end_date: null,
-                updated_at: new Date().toISOString(),
-              })
-              .eq('user_id', user.id);
+        const userId = getUserIdFromMetadata(session.metadata);
+        const tier = session.metadata?.tier || getTierFromPrice(session.metadata?.price_id || '');
+        const customerId = session.customer;
+        const subscriptionId = session.subscription;
 
-            if (error) {
-              console.error('Error updating subscription:', error);
-            } else {
-              console.log(`Subscription updated for ${customerEmail} to ${tier} via web`);
-            }
+        console.log('Checkout completado:', { userId, tier, customerId, subscriptionId });
+
+        if (userId) {
+          const { error } = await supabase
+            .from('subscriptions')
+            .update({
+              tier,
+              status: 'active',
+              subscription_source: 'web',
+              stripe_customer_id: customerId,
+              stripe_subscription_id: subscriptionId,
+              subscription_start_date: new Date().toISOString(),
+              subscription_end_date: null,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('user_id', userId);
+
+          if (error) {
+            console.error('Error actualizando suscripción:', error);
+          } else {
+            console.log(`Suscripción actualizada para usuario ${userId} a tier ${tier}`);
           }
+        } else {
+          console.error('No se encontró user_id en metadata del checkout');
         }
         break;
       }
@@ -79,36 +132,33 @@ serve(async (req) => {
       case 'customer.subscription.created':
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
-        const customerId = subscription.customer;
+        const userId = getUserIdFromMetadata(subscription.metadata);
         const priceId = subscription.items?.data?.[0]?.price?.id;
         const status = subscription.status;
+        const customerId = subscription.customer;
 
-        // Get customer email from metadata or Stripe
-        const customerEmail = subscription.metadata?.email;
+        console.log('Suscripción creada/actualizada:', { userId, priceId, status, customerId });
 
-        if (customerEmail) {
-          const { data: userData } = await supabase.auth.admin.listUsers();
-          const user = userData?.users?.find(u => u.email === customerEmail);
+        if (userId) {
+          const tier = status === 'active' ? getTierFromPrice(priceId) : 'FREE';
+          const subscriptionStatus = status === 'active' ? 'active' : 
+                                     status === 'canceled' ? 'cancelled' : 
+                                     status === 'past_due' ? 'expired' : 'active';
 
-          if (user) {
-            const tier = status === 'active' ? getTierFromPrice(priceId) : 'FREE';
-            const subscriptionStatus = status === 'active' ? 'active' : 
-                                       status === 'canceled' ? 'cancelled' : 
-                                       status === 'past_due' ? 'expired' : 'active';
+          const { error } = await supabase
+            .from('subscriptions')
+            .update({
+              tier,
+              status: subscriptionStatus,
+              subscription_source: 'web',
+              stripe_customer_id: customerId,
+              stripe_subscription_id: subscription.id,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('user_id', userId);
 
-            const { error } = await supabase
-              .from('subscriptions')
-              .update({
-                tier,
-                status: subscriptionStatus,
-                subscription_source: 'web',
-                updated_at: new Date().toISOString(),
-              })
-              .eq('user_id', user.id);
-
-            if (error) {
-              console.error('Error updating subscription:', error);
-            }
+          if (error) {
+            console.error('Error actualizando suscripción:', error);
           }
         }
         break;
@@ -116,27 +166,24 @@ serve(async (req) => {
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object;
-        const customerEmail = subscription.metadata?.email;
+        const userId = getUserIdFromMetadata(subscription.metadata);
 
-        if (customerEmail) {
-          const { data: userData } = await supabase.auth.admin.listUsers();
-          const user = userData?.users?.find(u => u.email === customerEmail);
+        console.log('Suscripción eliminada:', { userId });
 
-          if (user) {
-            const { error } = await supabase
-              .from('subscriptions')
-              .update({
-                tier: 'FREE',
-                status: 'cancelled',
-                subscription_source: 'web',
-                subscription_end_date: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-              })
-              .eq('user_id', user.id);
+        if (userId) {
+          const { error } = await supabase
+            .from('subscriptions')
+            .update({
+              tier: 'FREE',
+              status: 'cancelled',
+              subscription_source: 'web',
+              subscription_end_date: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .eq('user_id', userId);
 
-            if (error) {
-              console.error('Error updating subscription:', error);
-            }
+          if (error) {
+            console.error('Error actualizando suscripción:', error);
           }
         }
         break;
@@ -144,23 +191,29 @@ serve(async (req) => {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object;
-        const customerEmail = invoice.customer_email;
+        const subscriptionId = invoice.subscription;
 
-        if (customerEmail) {
-          const { data: userData } = await supabase.auth.admin.listUsers();
-          const user = userData?.users?.find(u => u.email === customerEmail);
+        console.log('Pago fallido para suscripción:', subscriptionId);
 
-          if (user) {
+        if (subscriptionId) {
+          // Buscar usuario por stripe_subscription_id
+          const { data: subData } = await supabase
+            .from('subscriptions')
+            .select('user_id')
+            .eq('stripe_subscription_id', subscriptionId)
+            .maybeSingle();
+
+          if (subData?.user_id) {
             const { error } = await supabase
               .from('subscriptions')
               .update({
                 status: 'expired',
                 updated_at: new Date().toISOString(),
               })
-              .eq('user_id', user.id);
+              .eq('user_id', subData.user_id);
 
             if (error) {
-              console.error('Error updating subscription:', error);
+              console.error('Error actualizando suscripción:', error);
             }
           }
         }
@@ -168,7 +221,7 @@ serve(async (req) => {
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        console.log(`Evento no manejado: ${event.type}`);
     }
 
     return new Response(
@@ -177,7 +230,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Stripe webhook error:', error);
+    console.error('Error en stripe-webhook:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
