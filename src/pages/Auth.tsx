@@ -6,13 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { Heart, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { z } from 'zod';
 
 const emailSchema = z.string().email('Email inválido');
 const passwordSchema = z.string().min(6, 'La contraseña debe tener al menos 6 caracteres');
 
-type AuthMode = 'login' | 'signup' | 'forgot';
+type AuthMode = 'login' | 'signup' | 'forgot' | 'reset';
 
 export default function Auth() {
   const [mode, setMode] = useState<AuthMode>('login');
@@ -23,15 +24,25 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirm?: string }>({});
   
-  const { signIn, signUp, resetPassword, user, loading } = useAuth();
+  const { signIn, signUp, resetPassword, updatePassword, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Detect password recovery event
   useEffect(() => {
-    if (!loading && user) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setMode('reset');
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && user && mode !== 'reset') {
       navigate('/');
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, mode]);
 
   const validateForm = () => {
     const newErrors: typeof errors = {};
@@ -84,6 +95,27 @@ export default function Auth() {
             description: 'Revisa tu bandeja de entrada para restablecer tu contraseña'
           });
           setMode('login');
+        }
+      } else if (mode === 'reset') {
+        if (password !== confirmPassword) {
+          setErrors({ confirm: 'Las contraseñas no coinciden' });
+          return;
+        }
+        const { error } = await updatePassword(password);
+        if (error) {
+          toast({
+            title: 'Error',
+            description: error.message,
+            variant: 'destructive'
+          });
+        } else {
+          toast({
+            title: 'Contraseña actualizada',
+            description: 'Ya puedes iniciar sesión con tu nueva contraseña'
+          });
+          setMode('login');
+          setPassword('');
+          setConfirmPassword('');
         }
       } else if (mode === 'login') {
         const { error } = await signIn(email, password);
@@ -155,46 +187,50 @@ export default function Auth() {
           </div>
           <h1 className="text-2xl font-bold text-foreground">Comer Sin Culpa</h1>
         <p className="text-muted-foreground">
-            {mode === 'login' ? 'Bienvenida de vuelta' : mode === 'signup' ? 'Comienza tu viaje de sanación' : 'Recupera tu acceso'}
+            {mode === 'login' ? 'Bienvenida de vuelta' : mode === 'signup' ? 'Comienza tu viaje de sanación' : mode === 'reset' ? 'Crea tu nueva contraseña' : 'Recupera tu acceso'}
           </p>
         </div>
 
         <Card className="border-border/50 shadow-lg">
           <CardHeader className="space-y-1 pb-4">
             <CardTitle className="text-xl">
-              {mode === 'login' ? 'Iniciar sesión' : mode === 'signup' ? 'Crear cuenta' : 'Restablecer contraseña'}
+              {mode === 'login' ? 'Iniciar sesión' : mode === 'signup' ? 'Crear cuenta' : mode === 'reset' ? 'Nueva contraseña' : 'Restablecer contraseña'}
             </CardTitle>
             <CardDescription>
               {mode === 'login' 
                 ? 'Ingresa tus datos para continuar' 
                 : mode === 'signup'
                 ? 'Completa el formulario para registrarte'
+                : mode === 'reset'
+                ? 'Ingresa tu nueva contraseña'
                 : 'Te enviaremos un enlace para restablecer tu contraseña'}
             </CardDescription>
           </CardHeader>
           
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={`pl-10 ${errors.email ? 'border-destructive' : ''}`}
-                    disabled={isLoading}
-                  />
+              {mode !== 'reset' && (
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="tu@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={`pl-10 ${errors.email ? 'border-destructive' : ''}`}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-sm text-destructive">{errors.email}</p>
+                  )}
                 </div>
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email}</p>
-                )}
-              </div>
+              )}
 
-              {mode !== 'forgot' && (
+              {(mode !== 'forgot') && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password">Contraseña</Label>
@@ -236,7 +272,7 @@ export default function Auth() {
                 </div>
               )}
 
-              {mode === 'signup' && (
+              {(mode === 'signup' || mode === 'reset') && (
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
                   <div className="relative">
@@ -265,16 +301,16 @@ export default function Auth() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {mode === 'login' ? 'Iniciando sesión...' : mode === 'signup' ? 'Creando cuenta...' : 'Enviando...'}
+                    {mode === 'login' ? 'Iniciando sesión...' : mode === 'signup' ? 'Creando cuenta...' : mode === 'reset' ? 'Actualizando...' : 'Enviando...'}
                   </>
                 ) : (
-                  mode === 'login' ? 'Iniciar sesión' : mode === 'signup' ? 'Crear cuenta' : 'Enviar enlace'
+                  mode === 'login' ? 'Iniciar sesión' : mode === 'signup' ? 'Crear cuenta' : mode === 'reset' ? 'Guardar contraseña' : 'Enviar enlace'
                 )}
               </Button>
             </form>
 
             <div className="mt-6 text-center space-y-2">
-              {mode === 'forgot' ? (
+              {mode === 'forgot' || mode === 'reset' ? (
                 <button
                   type="button"
                   onClick={() => {
