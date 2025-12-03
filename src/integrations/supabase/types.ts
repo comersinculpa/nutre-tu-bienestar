@@ -56,6 +56,8 @@ export type Database = {
           monthly_recipe_count: number
           revenuecat_user_id: string | null
           status: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
           subscription_end_date: string | null
           subscription_source: string | null
           subscription_start_date: string | null
@@ -71,6 +73,8 @@ export type Database = {
           monthly_recipe_count?: number
           revenuecat_user_id?: string | null
           status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           subscription_end_date?: string | null
           subscription_source?: string | null
           subscription_start_date?: string | null
@@ -86,6 +90,8 @@ export type Database = {
           monthly_recipe_count?: number
           revenuecat_user_id?: string | null
           status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           subscription_end_date?: string | null
           subscription_source?: string | null
           subscription_start_date?: string | null
