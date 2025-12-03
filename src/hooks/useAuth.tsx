@@ -24,6 +24,7 @@ interface AuthContextType {
   updateProfile: (data: Partial<Profile>) => Promise<{ error: Error | null }>;
   refreshProfile: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
+  updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -131,6 +132,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error };
   };
 
+  const updatePassword = async (newPassword: string) => {
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword
+    });
+    return { error };
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -142,7 +150,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signOut,
       updateProfile,
       refreshProfile,
-      resetPassword
+      resetPassword,
+      updatePassword
     }}>
       {children}
     </AuthContext.Provider>
