@@ -12,6 +12,7 @@ interface RevenueCatEvent {
     app_user_id: string;
     product_id: string;
     expiration_at_ms?: number;
+    store?: string; // APP_STORE, PLAY_STORE, etc.
   };
 }
 
@@ -68,8 +69,15 @@ serve(async (req) => {
       );
     }
 
+    // Determine subscription source based on store
+    const getSubscriptionSource = (store?: string): 'ios' | 'android' => {
+      if (store === 'APP_STORE' || store === 'MAC_APP_STORE') return 'ios';
+      return 'android'; // PLAY_STORE or default to android for mobile
+    };
+
     let updateData: Record<string, unknown> = {
-      revenuecat_user_id: event.app_user_id
+      revenuecat_user_id: event.app_user_id,
+      subscription_source: getSubscriptionSource(event.store),
     };
 
     switch (event.type) {
