@@ -44,15 +44,51 @@ export default function Suscripcion() {
   const currentTier = subscription?.tier || 'FREE';
   const currentTierInfo = getTierInfo(currentTier);
 
-  const handleUpgrade = (tier: SubscriptionTier) => {
+  const handleUpgrade = async (tier: SubscriptionTier) => {
     if (tier === currentTier) {
       toast.info('Ya tienes este plan activo');
       return;
     }
     
     setSelectedTier(tier);
-    // Here you would integrate with RevenueCat or your payment provider
-    toast.info('Función de pago próximamente disponible. Contacta con soporte para actualizar tu plan.');
+    
+    // RevenueCat integration for mobile
+    // Check if RevenueCat is available (Capacitor plugin)
+    const revenueCat = (window as any).RevenueCat;
+    
+    if (revenueCat) {
+      try {
+        // Get offerings from RevenueCat
+        const offerings = await revenueCat.getOfferings();
+        const currentOffering = offerings.current;
+        
+        if (currentOffering) {
+          const packageId = tier === 'BASIC' ? 'monthly_basic' : 'monthly_premium';
+          const selectedPackage = currentOffering.availablePackages.find(
+            (pkg: any) => pkg.identifier === packageId
+          );
+          
+          if (selectedPackage) {
+            const { customerInfo } = await revenueCat.purchasePackage({ aPackage: selectedPackage });
+            if (customerInfo.entitlements.active[tier.toLowerCase()]) {
+              toast.success(`¡Bienvenida al plan ${tier}!`);
+              // Refresh subscription data
+              window.location.reload();
+            }
+          }
+        }
+      } catch (error: any) {
+        console.error('RevenueCat purchase error:', error);
+        if (error.code !== 'PURCHASE_CANCELLED') {
+          toast.error('Error al procesar la compra. Inténtalo de nuevo.');
+        }
+      }
+    } else {
+      // Fallback for web or if RevenueCat not available
+      toast.info('Para suscribirte desde la app, usa la versión móvil. Para web, visita /suscripcion-web');
+    }
+    
+    setSelectedTier(null);
   };
 
   const getUsageProgress = (used: number, total: number) => {

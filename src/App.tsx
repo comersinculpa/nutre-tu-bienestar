@@ -33,6 +33,7 @@ import TCAModule from "./pages/TCAModule";
 import JuegosPage from "./pages/JuegosPage";
 import Suscripcion from "./pages/Suscripcion";
 import SuscripcionWeb from "./pages/SuscripcionWeb";
+import SubscriptionRouter from "./pages/SubscriptionRouter";
 import NotFound from "./pages/NotFound";
 import { BottomNavigation } from "./components/BottomNavigation";
 import { CrisisButton } from "./components/CrisisButton";
@@ -77,6 +78,7 @@ const App = () => (
               <Route path="/detector-hambre" element={<DetectorHambre />} />
               <Route path="/tca-module" element={<TCAModule />} />
               <Route path="/juegos" element={<JuegosPage />} />
+              <Route path="/planes" element={<SubscriptionRouter />} />
               <Route path="/suscripcion" element={<Suscripcion />} />
               <Route path="/suscripcion-web" element={<SuscripcionWeb />} />
               {/* Legacy routes for backward compatibility */}
