@@ -52,6 +52,8 @@ export type Database = {
           created_at: string
           id: string
           last_reset_date: string
+          last_webhook_event: string | null
+          last_webhook_event_date: string | null
           monthly_audio_count: number
           monthly_recipe_count: number
           revenuecat_user_id: string | null
@@ -69,6 +71,8 @@ export type Database = {
           created_at?: string
           id?: string
           last_reset_date?: string
+          last_webhook_event?: string | null
+          last_webhook_event_date?: string | null
           monthly_audio_count?: number
           monthly_recipe_count?: number
           revenuecat_user_id?: string | null
@@ -86,6 +90,8 @@ export type Database = {
           created_at?: string
           id?: string
           last_reset_date?: string
+          last_webhook_event?: string | null
+          last_webhook_event_date?: string | null
           monthly_audio_count?: number
           monthly_recipe_count?: number
           revenuecat_user_id?: string | null
@@ -98,6 +104,36 @@ export type Database = {
           tier?: Database["public"]["Enums"]["subscription_tier"]
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      webhook_events: {
+        Row: {
+          created_at: string
+          event_id: string
+          event_type: string
+          id: string
+          payload: Json | null
+          processed_at: string
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          event_type: string
+          id?: string
+          payload?: Json | null
+          processed_at?: string
+          source: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          event_type?: string
+          id?: string
+          payload?: Json | null
+          processed_at?: string
+          source?: string
         }
         Relationships: []
       }
