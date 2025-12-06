@@ -31,7 +31,7 @@ import Pausa from "./pages/Pausa";
 import DetectorHambre from "./pages/DetectorHambre";
 import TCAModule from "./pages/TCAModule";
 import JuegosPage from "./pages/JuegosPage";
-import Suscripcion from "./pages/Suscripcion";
+import SuscripcionMovil from "./pages/SuscripcionMovil";
 import SuscripcionWeb from "./pages/SuscripcionWeb";
 import SubscriptionRouter from "./pages/SubscriptionRouter";
 import SubscriptionSuccess from "./pages/SubscriptionSuccess";
@@ -41,6 +41,7 @@ import { BottomNavigation } from "./components/BottomNavigation";
 import { CrisisButton } from "./components/CrisisButton";
 import { PersistentFAB } from "./components/PersistentFAB";
 import TherapistChat from "./components/TherapistChat";
+import { PlatformGuard } from "./components/PlatformGuard";
 
 const queryClient = new QueryClient();
 
@@ -80,11 +81,27 @@ const App = () => (
               <Route path="/detector-hambre" element={<DetectorHambre />} />
               <Route path="/tca-module" element={<TCAModule />} />
               <Route path="/juegos" element={<JuegosPage />} />
+              
+              {/* Subscription routes - all redirect to platform-specific page */}
               <Route path="/planes" element={<SubscriptionRouter />} />
-              <Route path="/suscripcion" element={<Suscripcion />} />
-              <Route path="/suscripcion-web" element={<SuscripcionWeb />} />
+              <Route path="/suscripcion" element={<SubscriptionRouter />} />
+              <Route path="/subscription" element={<SubscriptionRouter />} />
+              
+              {/* Platform-specific subscription pages with guards */}
+              <Route path="/suscripcion-web" element={
+                <PlatformGuard requireWeb>
+                  <SuscripcionWeb />
+                </PlatformGuard>
+              } />
+              <Route path="/suscripcion-movil" element={
+                <PlatformGuard requireNative>
+                  <SuscripcionMovil />
+                </PlatformGuard>
+              } />
+              
               <Route path="/subscription/success" element={<SubscriptionSuccess />} />
               <Route path="/subscription/cancel" element={<SubscriptionCancel />} />
+              
               {/* Legacy routes for backward compatibility */}
               <Route path="/diario" element={<DiarioEmocional />} />
               <Route path="/detector" element={<DetectorHambre />} />

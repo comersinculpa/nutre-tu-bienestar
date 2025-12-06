@@ -78,7 +78,7 @@ export function isWeb(): boolean {
  */
 export function getSubscriptionRoute(): string {
   if (isNativeApp()) {
-    return '/suscripcion'; // Mobile (RevenueCat)
+    return '/suscripcion-movil'; // Mobile (RevenueCat)
   }
   return '/suscripcion-web'; // Web (Stripe)
 }

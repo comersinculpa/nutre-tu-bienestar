@@ -12,23 +12,18 @@ export default function SubscriptionRouter() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Detect platform and redirect to appropriate subscription page
+    // Instant platform detection and redirect
     if (isNativeApp()) {
-      // Native app (iOS/Android) → RevenueCat
-      navigate('/suscripcion', { replace: true });
+      navigate('/suscripcion-movil', { replace: true });
     } else {
-      // Web → Stripe
       navigate('/suscripcion-web', { replace: true });
     }
   }, [navigate]);
 
-  // Show loading while detecting platform
+  // Brief loading state during redirect
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center space-y-4">
-        <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
-        <p className="text-muted-foreground">Cargando opciones de suscripción...</p>
-      </div>
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
     </div>
   );
 }
