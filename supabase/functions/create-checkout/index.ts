@@ -9,10 +9,10 @@ const corsHeaders = {
 // Mapeo de tiers a precios de Stripe
 const getPriceId = (tier: string): string | null => {
   if (tier === 'BASIC') {
-    return Deno.env.get('STRIPE_PRICE_BASIC') || Deno.env.get('STRIPE_PRICE_ID_BASIC') || null;
+    return Deno.env.get('STRIPE_PRICE_ID_BASIC') || null;
   }
   if (tier === 'PREMIUM') {
-    return Deno.env.get('STRIPE_PRICE_PREMIUM') || Deno.env.get('STRIPE_PRICE_ID_PREMIUM') || null;
+    return Deno.env.get('STRIPE_PRICE_ID_PREMIUM') || null;
   }
   return null;
 };

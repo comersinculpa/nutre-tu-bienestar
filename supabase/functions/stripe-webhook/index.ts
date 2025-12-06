@@ -42,8 +42,8 @@ async function verifyStripeSignature(payload: string, signature: string, secret:
 
 // Mapear price IDs a tiers
 function getTierFromPrice(priceId: string): 'FREE' | 'BASIC' | 'PREMIUM' {
-  const basicPriceId = Deno.env.get('STRIPE_PRICE_BASIC') || Deno.env.get('STRIPE_PRICE_ID_BASIC');
-  const premiumPriceId = Deno.env.get('STRIPE_PRICE_PREMIUM') || Deno.env.get('STRIPE_PRICE_ID_PREMIUM');
+  const basicPriceId = Deno.env.get('STRIPE_PRICE_ID_BASIC');
+  const premiumPriceId = Deno.env.get('STRIPE_PRICE_ID_PREMIUM');
   
   if (priceId === basicPriceId) return 'BASIC';
   if (priceId === premiumPriceId) return 'PREMIUM';
