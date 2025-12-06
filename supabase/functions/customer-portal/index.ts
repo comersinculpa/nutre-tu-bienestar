@@ -7,49 +7,78 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Manejar preflight CORS
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
+  console.log('[Customer Portal] Solicitud recibida');
+
   try {
     const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
     if (!stripeSecretKey) {
-      throw new Error('STRIPE_SECRET_KEY no configurada');
+      console.error('[Customer Portal] STRIPE_SECRET_KEY no configurada');
+      return new Response(
+        JSON.stringify({ error: 'Configuración no disponible' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
 
-    const { userId, returnUrl } = await req.json();
-
-    // Validar entrada
-    if (!userId) {
+    // Obtener usuario del token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: 'userId es requerido' }),
+        JSON.stringify({ error: 'Debes iniciar sesión' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Usuario no autenticado' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Obtener returnUrl del body (opcional)
+    let returnUrl = '';
+    try {
+      const body = await req.json();
+      returnUrl = body.returnUrl || '';
+    } catch {
+      // Body vacío
+    }
+
+    if (!returnUrl) {
+      returnUrl = `${req.headers.get('origin') || 'https://lovable.dev'}/suscripcion`;
+    }
+
+    console.log(`[Customer Portal] Usuario: ${user.id}`);
+
+    // Obtener stripe_customer_id
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('stripe_customer_id, subscription_source')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (!subscription?.stripe_customer_id) {
+      return new Response(
+        JSON.stringify({ error: 'No tienes una suscripción de Stripe activa' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Obtener el stripe_customer_id del usuario
-    const { data: subscription, error: subError } = await supabase
-      .from('subscriptions')
-      .select('stripe_customer_id')
-      .eq('user_id', userId)
-      .maybeSingle();
+    console.log(`[Customer Portal] Customer: ${subscription.stripe_customer_id}`);
 
-    if (subError || !subscription?.stripe_customer_id) {
-      console.error('Error obteniendo customer_id:', subError);
-      return new Response(
-        JSON.stringify({ error: 'No se encontró cliente de Stripe para este usuario' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    console.log('Creando portal session para customer:', subscription.stripe_customer_id);
-
-    // Crear sesión del portal de cliente
+    // Crear sesión del portal
     const portalResponse = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
       method: 'POST',
       headers: {
@@ -57,29 +86,32 @@ serve(async (req) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        'customer': subscription.stripe_customer_id,
-        'return_url': returnUrl || `${req.headers.get('origin')}/suscripcion`,
+        customer: subscription.stripe_customer_id,
+        return_url: returnUrl,
       }),
     });
 
     const portalData = await portalResponse.json();
 
     if (!portalResponse.ok) {
-      console.error('Error creando portal session:', portalData);
-      throw new Error(portalData.error?.message || 'Error creando sesión del portal');
+      console.error('[Customer Portal] Error de Stripe:', portalData);
+      return new Response(
+        JSON.stringify({ error: 'Error al crear el portal de cliente' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    console.log('Portal session creada:', portalData.id);
+    console.log(`[Customer Portal] Portal creado para usuario ${user.id}`);
 
     return new Response(
       JSON.stringify({ url: portalData.url }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
-    console.error('Error en customer-portal:', error);
+    console.error(`[Customer Portal] Error: ${error.message}`);
     return new Response(
-      JSON.stringify({ error: error.message || 'Error interno del servidor' }),
+      JSON.stringify({ error: 'Error al procesar la solicitud' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

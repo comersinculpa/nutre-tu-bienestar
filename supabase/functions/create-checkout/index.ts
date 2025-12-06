@@ -6,69 +6,109 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Mapeo de tiers a precios de Stripe (configura estos IDs en tu dashboard de Stripe)
-const PRICE_IDS: Record<string, string> = {
-  'BASIC': Deno.env.get('STRIPE_PRICE_BASIC') || 'price_basic_monthly',
-  'PREMIUM': Deno.env.get('STRIPE_PRICE_PREMIUM') || 'price_premium_monthly',
+// Mapeo de tiers a precios de Stripe
+const getPriceId = (tier: string): string | null => {
+  if (tier === 'BASIC') {
+    return Deno.env.get('STRIPE_PRICE_BASIC') || Deno.env.get('STRIPE_PRICE_ID_BASIC') || null;
+  }
+  if (tier === 'PREMIUM') {
+    return Deno.env.get('STRIPE_PRICE_PREMIUM') || Deno.env.get('STRIPE_PRICE_ID_PREMIUM') || null;
+  }
+  return null;
 };
 
 serve(async (req) => {
-  // Manejar preflight CORS
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
+  console.log('[Create Checkout] Solicitud recibida');
+
   try {
     const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
     if (!stripeSecretKey) {
-      throw new Error('STRIPE_SECRET_KEY no configurada');
+      console.error('[Create Checkout] STRIPE_SECRET_KEY no configurada');
+      return new Response(
+        JSON.stringify({ error: 'Configuración de pago no disponible' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
 
+    // Parsear body
     const { tier, userId, successUrl, cancelUrl } = await req.json();
 
-    // Validar entrada
-    if (!tier || !userId) {
-      return new Response(
-        JSON.stringify({ error: 'Faltan parámetros: tier y userId son requeridos' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    if (!['BASIC', 'PREMIUM'].includes(tier)) {
+    // Validación de tier
+    if (!tier || !['BASIC', 'PREMIUM'].includes(tier)) {
+      console.error('[Create Checkout] Tier inválido:', tier);
       return new Response(
         JSON.stringify({ error: 'Tier inválido. Debe ser BASIC o PREMIUM' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Obtener datos del usuario
-    const { data: userData, error: userError } = await supabase.auth.admin.getUserById(userId);
-    if (userError || !userData?.user) {
-      console.error('Error obteniendo usuario:', userError);
+    // Obtener price_id
+    const priceId = getPriceId(tier);
+    if (!priceId) {
+      console.error(`[Create Checkout] Price ID no configurado para tier ${tier}`);
       return new Response(
-        JSON.stringify({ error: 'Usuario no encontrado' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: `Precio no configurado para el plan ${tier}` }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const userEmail = userData.user.email;
+    // Verificar usuario
+    let userIdToUse = userId;
+    let userEmail = '';
 
-    // Verificar si ya existe un customer en Stripe
+    if (!userIdToUse) {
+      // Intentar obtener del token
+      const authHeader = req.headers.get('Authorization');
+      if (authHeader) {
+        const supabaseAnon = createClient(supabaseUrl, supabaseAnonKey, {
+          global: { headers: { Authorization: authHeader } }
+        });
+        const { data: { user } } = await supabaseAnon.auth.getUser();
+        if (user) {
+          userIdToUse = user.id;
+          userEmail = user.email || '';
+        }
+      }
+    }
+
+    if (!userIdToUse) {
+      console.error('[Create Checkout] Usuario no autenticado');
+      return new Response(
+        JSON.stringify({ error: 'Debes iniciar sesión para suscribirte' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Obtener email del usuario si no lo tenemos
+    if (!userEmail) {
+      const { data: userData } = await supabase.auth.admin.getUserById(userIdToUse);
+      userEmail = userData.user?.email || '';
+    }
+
+    console.log(`[Create Checkout] Creando sesión para usuario ${userIdToUse}, tier: ${tier}`);
+
+    // Verificar si ya existe un stripe_customer_id
     const { data: subscription } = await supabase
       .from('subscriptions')
       .select('stripe_customer_id')
-      .eq('user_id', userId)
+      .eq('user_id', userIdToUse)
       .maybeSingle();
 
-    let customerId = subscription?.stripe_customer_id;
+    let stripeCustomerId = subscription?.stripe_customer_id;
 
-    // Si no existe customer, crear uno en Stripe
-    if (!customerId) {
-      console.log('Creando nuevo customer en Stripe para:', userEmail);
+    // Crear cliente de Stripe si no existe
+    if (!stripeCustomerId && userEmail) {
+      console.log('[Create Checkout] Creando cliente en Stripe');
       
       const customerResponse = await fetch('https://api.stripe.com/v1/customers', {
         method: 'POST',
@@ -77,43 +117,48 @@ serve(async (req) => {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-          email: userEmail || '',
-          'metadata[user_id]': userId,
+          email: userEmail,
+          'metadata[user_id]': userIdToUse,
         }),
       });
 
-      const customerData = await customerResponse.json();
-      if (!customerResponse.ok) {
-        console.error('Error creando customer:', customerData);
-        throw new Error('Error creando customer en Stripe');
+      if (customerResponse.ok) {
+        const customer = await customerResponse.json();
+        stripeCustomerId = customer.id;
+
+        // Guardar customer_id
+        await supabase
+          .from('subscriptions')
+          .update({ stripe_customer_id: stripeCustomerId })
+          .eq('user_id', userIdToUse);
+
+        console.log(`[Create Checkout] Cliente Stripe creado: ${stripeCustomerId}`);
       }
-
-      customerId = customerData.id;
-
-      // Guardar el customer_id en la base de datos
-      await supabase
-        .from('subscriptions')
-        .update({ stripe_customer_id: customerId })
-        .eq('user_id', userId);
     }
 
-    // Crear sesión de checkout
-    const priceId = PRICE_IDS[tier];
-    console.log('Creando checkout session para tier:', tier, 'price:', priceId);
+    // URLs
+    const origin = req.headers.get('origin') || 'https://lovable.dev';
+    const defaultSuccessUrl = successUrl || `${origin}/suscripcion?success=true&session_id={CHECKOUT_SESSION_ID}`;
+    const defaultCancelUrl = cancelUrl || `${origin}/suscripcion?cancelled=true`;
 
-    const checkoutParams = new URLSearchParams({
-      'customer': customerId,
+    // Crear Checkout Session
+    const sessionParams: Record<string, string> = {
       'mode': 'subscription',
       'line_items[0][price]': priceId,
       'line_items[0][quantity]': '1',
-      'success_url': successUrl || `${req.headers.get('origin')}/suscripcion?success=true`,
-      'cancel_url': cancelUrl || `${req.headers.get('origin')}/suscripcion?canceled=true`,
-      'metadata[user_id]': userId,
+      'success_url': defaultSuccessUrl,
+      'cancel_url': defaultCancelUrl,
+      'metadata[user_id]': userIdToUse,
       'metadata[tier]': tier,
-      'subscription_data[metadata][user_id]': userId,
+      'subscription_data[metadata][user_id]': userIdToUse,
       'subscription_data[metadata][tier]': tier,
-      'subscription_data[metadata][email]': userEmail || '',
-    });
+    };
+
+    if (stripeCustomerId) {
+      sessionParams['customer'] = stripeCustomerId;
+    } else if (userEmail) {
+      sessionParams['customer_email'] = userEmail;
+    }
 
     const checkoutResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',
@@ -121,30 +166,33 @@ serve(async (req) => {
         'Authorization': `Bearer ${stripeSecretKey}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: checkoutParams,
+      body: new URLSearchParams(sessionParams),
     });
 
     const checkoutData = await checkoutResponse.json();
-    
+
     if (!checkoutResponse.ok) {
-      console.error('Error creando checkout session:', checkoutData);
-      throw new Error(checkoutData.error?.message || 'Error creando sesión de pago');
+      console.error('[Create Checkout] Error de Stripe:', checkoutData);
+      return new Response(
+        JSON.stringify({ error: checkoutData.error?.message || 'Error al crear sesión de pago' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    console.log('Checkout session creada:', checkoutData.id);
+    console.log(`[Create Checkout] Sesión creada: ${checkoutData.id}`);
 
     return new Response(
       JSON.stringify({ 
         sessionId: checkoutData.id, 
         url: checkoutData.url 
       }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
-    console.error('Error en create-checkout:', error);
+    console.error(`[Create Checkout] Error: ${error.message}`);
     return new Response(
-      JSON.stringify({ error: error.message || 'Error interno del servidor' }),
+      JSON.stringify({ error: 'Error al procesar la solicitud' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
